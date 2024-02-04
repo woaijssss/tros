@@ -1,37 +1,80 @@
-# tros
-
-#### 介绍
-友行应用级OS框架底库
-
-#### 软件架构
-软件架构说明
+## 友行应用级OS框架底库
 
 
-#### 安装教程
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 使用说明
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
-
-
-#### 特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+- [点击查看tros使用示例](https://gitee.com/idigpower/tros-example-server.git
+  )
+- 目录结构：
+  - |--conf: 配置文件管理
+  - |--contants: 配置文件key常量 && 应用级的常量定义
+  - |--context: tros版本的context封装
+  - |--enums: 应用级枚举定义
+    - |--country: 国家定义
+    - |--currency: 货币定义
+  - |--lang: 语言定义（后续可能废弃）
+  - |--logx: 应用级日志管理trlogger
+  - |--pkg: 应用级工具包，包含公共的工具方法和第三方
+    - |--third_party: 第三方访问方法
+    - |--utils: 工具类方法
+      - |--encrypt: 应用级加解密方法
+  - |--server: 应用级微服务启动的主入口
+    - |--grpc: grpc微服务
+    - |--http: http微服务
+    - |--middleware: grpc和http的拦截器
+  - |--sys: 系统级别的方法
+    - |--cmd: 命令行的执行方法
+    - |--structure: 应用级数据结构
+    - |--timer: 应用级定时器
+  - |--trerror: 应用级通用的错误定义
+  - |--trkit: 中间件工具包，包含db、消息队列等服务器中间件的连接和使用
+    - |--mongox: mongodb客户端
+    - |--mysqlx: mysqldb客户端
+    - |--redisx: redisdb客户端
+- 说明：
+  - 采用grpc-gateway技术，同时支持 restful api 和 grpc api。
+  - 外部可采用 http 方式接入。
+  - 内部可采用 grpc 做微服务通讯
+  - 接口定义示例：
+    - 通过定义 protobuf 文件来实现接口定义
+    - 使用 buf 命令可以将 protobuf 文件，编译出 pb.go、pb.gw.go、_grpc.pb.go 三个文件
+    - 通过“继承”的形式，来实现 service 中的 api 接口
+  ```protobuf
+  syntax = "proto3";
+  
+  package console.v1;
+  
+  //import "console/v1/common.proto";
+  import "google/api/annotations.proto";
+  //import "google/api/field_behavior.proto";
+  import "google/protobuf/descriptor.proto";
+  //import "google/protobuf/empty.proto";
+  import "protoc-gen-openapiv2/options/annotations.proto";
+  
+  option go_package = "example-server/console/v1";
+  
+  // XXX api
+  service ExampleService {
+    // XXXX功能
+    rpc List(ListRequest) returns (ListResponse) {
+      option (google.api.http) = {
+        post: "/console/v1/example/list"
+        body: "*"
+      };
+      option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        tags: ["XXXX功能"]
+      };
+    }
+  }
+  
+  // ListResponse响应结构
+  message ListResponse {
+    // XXXX
+    int64 total = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "漏洞实例总数"}];
+  }
+  
+  // 详情请求结构
+  message ListRequest {
+    // XXXXX
+    string id = 1;
+  }
+  ```

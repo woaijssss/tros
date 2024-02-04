@@ -1,0 +1,67 @@
+package client
+
+/*
+    prometheus 接口服务和参数的案例，看，方便后续标准化
+*/
+
+import (
+	"flag"
+	"fmt"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"net/http"
+	"runtime/debug"
+	"strconv"
+)
+
+// prometheus全局变量初始化 prometheus step 1
+var (
+	HttpRequestLatency *prometheus.GaugeVec
+	HttpRequestQps     *prometheus.CounterVec
+)
+
+const (
+	HttpRequestLatencyName = "http_request_latency_by_url"
+	HttpRequestLatencyHelp = "The HTTP request latencies in seconds."
+
+	HttpRequestQpsNameName = "http_url_qps_by_url"
+	HttpRequestQpsNameHelp = "number of HTTP request for url"
+
+	CommunityLabel = "community_name"
+	UrlLabel       = "url"
+	ErrorCodeLabel = "code"
+)
+
+// 启动prometheus prometheus step 2
+func InitPrometheus() {
+	// 监控接口请求耗时
+	HttpRequestLatency = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: HttpRequestLatencyName,
+		Help: HttpRequestLatencyHelp,
+	}, []string{CommunityLabel, UrlLabel})
+
+	// 监控接口请求次数
+	HttpRequestQps = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: HttpRequestQpsNameName,
+		Help: HttpRequestQpsNameHelp,
+	}, []string{CommunityLabel, UrlLabel, ErrorCodeLabel})
+
+	prometheus.MustRegister(
+		HttpRequestLatency,
+		HttpRequestQps,
+	)
+}
+
+// 启动prometheus prometheus step 3
+func StartPrometheus(port int) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Printf("initViper down [stack=%+v] [recover=%+v]", string(debug.Stack()), r)
+		}
+	}()
+	flag.Parse()
+	portString := ":" + strconv.Itoa(port)
+	var addr = flag.String("listen-address", portString, "The address to listen on for HTTP requests.")
+	http.Handle("/metrics", promhttp.Handler())
+	_ = http.ListenAndServe(*addr, nil)
+}
