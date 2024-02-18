@@ -29,6 +29,10 @@ func GetDate() string {
 	return strDate
 }
 
+func GetDateOnly() string {
+	return time.Now().Format(time.DateOnly)
+}
+
 func GetDateAndHour() string {
 	strDate := time.Unix(time.Now().Unix(), 0).Format("2006010215")
 	return strDate
