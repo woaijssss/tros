@@ -7,25 +7,25 @@ import (
 )
 
 type TokenInfo struct {
-	Uuid     string `json:"uuid"`
-	UserName string `json:"user_name"`
-	UserId   string `json:"user_id"`
-	Phone    string `json:"phone"`
-	Role     string `json:"role"`
-	Password string `json:"password"`
-	Expire   string `json:"expire"`
+	//Uuid     string `json:"uuid"`
+	//UserName string `json:"user_name"`
+	UserId string `json:"user_id"`
+	//Phone    string `json:"phone"`
+	//Role     string `json:"role"`
+	//Password string `json:"password"`
+	//Expire   string `json:"expire"`
 }
 
 func CreateToken(key string, tokenInfo TokenInfo) string {
 
 	m := make(map[string]interface{}, 0)
-	m["uuid"] = tokenInfo.Uuid
-	m["user_name"] = tokenInfo.UserName
+	//m["uuid"] = tokenInfo.Uuid
+	//m["user_name"] = tokenInfo.UserName
 	m["user_id"] = tokenInfo.UserId
-	m["role"] = tokenInfo.Role
-	m["password"] = tokenInfo.Password
-	m["expire"] = tokenInfo.Expire
-	m["phone"] = tokenInfo.Phone
+	//m["role"] = tokenInfo.Role
+	//m["password"] = tokenInfo.Password
+	//m["expire"] = tokenInfo.Expire
+	//m["phone"] = tokenInfo.Phone
 
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := make(jwt.MapClaims)
@@ -65,40 +65,40 @@ func GetOriginalsInfo(claims interface{}) *TokenInfo {
 		return &tokenInfo
 	}
 
-	uuid, ok := claims.(jwt.MapClaims)["uuid"].(string)
-	if ok {
-		tokenInfo.Uuid = uuid
-	}
+	//uuid, ok := claims.(jwt.MapClaims)["uuid"].(string)
+	//if ok {
+	//	tokenInfo.Uuid = uuid
+	//}
 
-	userName, ok := claims.(jwt.MapClaims)["user_name"].(string)
-	if ok {
-		tokenInfo.UserName = userName
-	}
+	//userName, ok := claims.(jwt.MapClaims)["user_name"].(string)
+	//if ok {
+	//	tokenInfo.UserName = userName
+	//}
 
 	userId, ok := claims.(jwt.MapClaims)["user_id"].(string)
 	if ok {
 		tokenInfo.UserId = userId
 	}
 
-	role, ok := claims.(jwt.MapClaims)["role"].(string)
-	if ok {
-		tokenInfo.Role = role
-	}
+	//role, ok := claims.(jwt.MapClaims)["role"].(string)
+	//if ok {
+	//	tokenInfo.Role = role
+	//}
 
-	password, ok := claims.(jwt.MapClaims)["password"].(string)
-	if ok {
-		tokenInfo.Password = password
-	}
+	//password, ok := claims.(jwt.MapClaims)["password"].(string)
+	//if ok {
+	//	tokenInfo.Password = password
+	//}
 
-	expire, ok := claims.(jwt.MapClaims)["expire"].(string)
-	if ok {
-		tokenInfo.Expire = expire
-	}
+	//expire, ok := claims.(jwt.MapClaims)["expire"].(string)
+	//if ok {
+	//	tokenInfo.Expire = expire
+	//}
 
-	phone, ok := claims.(jwt.MapClaims)["phone"].(string)
-	if ok {
-		tokenInfo.Phone = phone
-	}
+	//phone, ok := claims.(jwt.MapClaims)["phone"].(string)
+	//if ok {
+	//	tokenInfo.Phone = phone
+	//}
 
 	return &tokenInfo
 }
