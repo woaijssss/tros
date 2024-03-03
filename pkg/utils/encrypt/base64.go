@@ -14,3 +14,16 @@ func Decode(str string) string {
 
 	return string(decoded)
 }
+
+func EncodeRaw(str string) string {
+	return base64.RawStdEncoding.EncodeToString([]byte(str))
+}
+
+func DecodeRaw(str string) string {
+	decoded, err := base64.RawStdEncoding.DecodeString(str)
+	if err != nil {
+		return ""
+	}
+
+	return string(decoded)
+}

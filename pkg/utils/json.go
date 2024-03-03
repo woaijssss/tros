@@ -3,6 +3,7 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
+	"gitee.com/idigpower/tros/trerror"
 	"os"
 )
 
@@ -47,4 +48,17 @@ func ByteToJson[T any](b []byte) (T, error) {
 	var v T
 	err := json.Unmarshal(b, &v)
 	return v, err
+}
+
+func MapToJson[T any](m map[string]interface{}) (T, error) {
+	var t T
+	b, err := json.Marshal(m)
+	if err != nil {
+		return t, trerror.DefaultTrError(fmt.Sprintf("marshal map err: [%+v]", err))
+	}
+	err = json.Unmarshal(b, &t)
+	if err != nil {
+		return t, trerror.DefaultTrError(fmt.Sprintf("unmarshal to struct err: [%+v]", err))
+	}
+	return t, nil
 }

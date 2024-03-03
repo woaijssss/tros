@@ -2,12 +2,13 @@ package utils
 
 import (
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
+	"gitee.com/idigpower/tros/trerror"
+	"github.com/golang-jwt/jwt"
 	"reflect"
 )
 
 type TokenInfo struct {
-	//Uuid     string `json:"uuid"`
+	Uuid string `json:"uuid"`
 	//UserName string `json:"user_name"`
 	UserId int64 `json:"user_id"`
 	//Phone    string `json:"phone"`
@@ -16,8 +17,7 @@ type TokenInfo struct {
 	//Expire   string `json:"expire"`
 }
 
-func CreateToken(key string, tokenInfo TokenInfo) string {
-
+func CreateToken(key string, tokenInfo *TokenInfo) string {
 	m := make(map[string]interface{}, 0)
 	//m["uuid"] = tokenInfo.Uuid
 	//m["user_name"] = tokenInfo.UserName
@@ -39,22 +39,46 @@ func CreateToken(key string, tokenInfo TokenInfo) string {
 	return tokenString
 }
 
-func ParseToken(key string, tokenString string) (interface{}, bool) {
+func ParseToken(key string, tokenString string) (*TokenInfo, error) {
 	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+			return nil, fmt.Errorf("ParseToken Unexpected signing method: %v", token.Header["alg"])
 		}
 		return []byte(key), nil
 	})
 
 	if token == nil || token.Valid == false || token.Claims == nil {
-		return "", false
+		return nil, trerror.DefaultTrError("token is invalid")
 	}
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		return claims, true
-	} else {
-		return "", false
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return nil, trerror.DefaultTrError(fmt.Sprintf("ParseToken convert MapClaims fail: [%+v]", token.Claims))
 	}
+	tokenInfo, err := MapToJson[TokenInfo](claims)
+	if err != nil {
+		return nil, trerror.DefaultTrError(fmt.Sprintf("ParseToken token map to struct fail: [%+v]", err))
+	}
+	return &tokenInfo, nil
+}
+
+// 解析JWT，但不验证签名
+func ParseTokenWithoutVerify(tokenString string) (*TokenInfo, error) {
+	// golang和java服务通用的userId key
+	token, err := jwt.Parse(tokenString, nil)
+	if err != nil {
+		if _, ok := err.(*jwt.ValidationError); !ok {
+			return nil, trerror.DefaultTrError(fmt.Sprintf("Error parsing token: [%+v]", err))
+		}
+	}
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return nil, trerror.DefaultTrError(fmt.Sprintf("ParseTokenWithoutVerify convert MapClaims fail: [%+v]", token.Claims))
+	}
+	tokenInfo, err := MapToJson[TokenInfo](claims)
+	if err != nil {
+		return nil, trerror.DefaultTrError(fmt.Sprintf("ParseTokenWithoutVerify token map to struct fail: [%+v]", err))
+	}
+	return &tokenInfo, nil
 }
 
 func GetOriginalsInfo(claims interface{}) *TokenInfo {
