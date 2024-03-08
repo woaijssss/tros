@@ -10,7 +10,8 @@ import (
 type TokenInfo struct {
 	Uuid string `json:"uuid"`
 	//UserName string `json:"user_name"`
-	UserId int64 `json:"user_id"`
+	UserId int64  `json:"user_id"`
+	UserNo string `json:"user_no"`
 	//Phone    string `json:"phone"`
 	//Role     string `json:"role"`
 	//Password string `json:"password"`
@@ -22,6 +23,7 @@ func CreateToken(key string, tokenInfo *TokenInfo) string {
 	//m["uuid"] = tokenInfo.Uuid
 	//m["user_name"] = tokenInfo.UserName
 	m["user_id"] = tokenInfo.UserId
+	m["user_no"] = tokenInfo.UserNo
 	//m["role"] = tokenInfo.Role
 	//m["password"] = tokenInfo.Password
 	//m["expire"] = tokenInfo.Expire
