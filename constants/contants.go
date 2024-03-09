@@ -16,6 +16,7 @@ const (
 	PageNo     = "pageNo"
 	PageSize   = "pageSize"
 	Token      = "token"
+	UserId     = "user_id"
 	ShareToken = "s-token"
 	RemoteIp   = "remote-ip"
 	CompanyId  = "company-id"

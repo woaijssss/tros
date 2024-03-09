@@ -170,7 +170,7 @@ func (dl *TrLogger) withFields(ctx context.Context) *logrus.Entry {
 	//fmt.Println("--->: ", reflect.ValueOf(ctx.Value(interceptor.TraceKey)))
 	traceId, ok := ctx.Value(constants.TraceId).(string)
 	if !ok {
-		traceId = context3.GenTraceID(ctx)
+		traceId = context3.GenTraceID()
 	}
 	//if ctx.GetExtraValue(logEntryKey) != nil {
 	//	return ctx.GetExtraValue(logEntryKey).(*logrus.Entry)

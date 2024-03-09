@@ -52,17 +52,13 @@ func (ctx *TrContext) GetExtraValue(key string) any {
 	}
 }
 
-func GenTraceID(ctx context.Context) string {
-	newCtx, ok := ctx.(*gin.Context)
-	if ok && newCtx.Request != nil {
-		ctx = newCtx.Request.Context()
-	}
+func GenTraceID() string {
 	return encrypt.EncodeMD5AsEmpty()
 }
 
 func GetContextWithTraceId() context.Context {
 	ctx := context.Background()
-	return injectToContext(ctx, GenTraceID(ctx))
+	return AddTraceID(ctx, GenTraceID())
 }
 
 func GetTraceIdFromContext(ctx context.Context) string {
@@ -74,26 +70,25 @@ func GetTraceIdFromContext(ctx context.Context) string {
 	return traceId
 }
 
-// FromContext get trace entry from context.
-func FromContext(ctx context.Context) context.Context {
-	traceId := GetTraceIdFromContext(ctx)
-	if traceId == "" {
-		return GetContextWithTraceId()
+func GetUserIdFromContext(ctx context.Context) string {
+	if c, ok := ctx.(*gin.Context); ok {
+		return c.GetString(constants.UserId)
 	}
-	return injectToContext(context.Background(), traceId)
+
+	return ctx.Value(constants.UserId).(string)
 }
 
 func InsertTraceID(ctx context.Context) context.Context {
 	md := metautils.ExtractIncoming(ctx)
 	s := md.Get(metadataTrace)
 	if s == "" {
-		s = GenTraceID(ctx)
+		s = GenTraceID()
 	}
 
-	return injectToContext(ctx, s)
+	return AddTraceID(ctx, s)
 }
 
-func injectToContext(ctx context.Context, traceId string) context.Context {
+func AddTraceID(ctx context.Context, traceId string) context.Context {
 	if traceId == "" {
 		return ctx
 	}
@@ -107,4 +102,16 @@ func injectToContext(ctx context.Context, traceId string) context.Context {
 		return c
 	}
 	return context.WithValue(ctx, constants.TraceId, traceId)
+}
+
+func AddUserID(ctx context.Context, userId string) context.Context {
+	if c, ok := ctx.(*gin.Context); ok { // 兼容纯gin模式的请求
+		c.Set(constants.UserId, userId)
+		if c.Request != nil {
+			newCtx := context.WithValue(c.Request.Context(), constants.UserId, userId)
+			c.Request = c.Request.WithContext(newCtx)
+		}
+		return c
+	}
+	return context.WithValue(ctx, constants.UserId, userId) // 兼容grpc-gateway模式的请求
 }

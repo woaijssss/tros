@@ -10,8 +10,8 @@ import (
 type TokenInfo struct {
 	Uuid string `json:"uuid"`
 	//UserName string `json:"user_name"`
-	UserId int64  `json:"user_id"`
-	UserNo string `json:"user_no"`
+	//UserId int64  `json:"user_id"`
+	UserId string `json:"user_id"`
 	//Phone    string `json:"phone"`
 	//Role     string `json:"role"`
 	//Password string `json:"password"`
@@ -23,7 +23,7 @@ func CreateToken(key string, tokenInfo *TokenInfo) string {
 	//m["uuid"] = tokenInfo.Uuid
 	//m["user_name"] = tokenInfo.UserName
 	m["user_id"] = tokenInfo.UserId
-	m["user_no"] = tokenInfo.UserNo
+	//m["user_no"] = tokenInfo.UserNo
 	//m["role"] = tokenInfo.Role
 	//m["password"] = tokenInfo.Password
 	//m["expire"] = tokenInfo.Expire
@@ -101,7 +101,7 @@ func GetOriginalsInfo(claims interface{}) *TokenInfo {
 	//	tokenInfo.UserName = userName
 	//}
 
-	userId, ok := claims.(jwt.MapClaims)["user_id"].(int64)
+	userId, ok := claims.(jwt.MapClaims)["user_id"].(string)
 	if ok {
 		tokenInfo.UserId = userId
 	}

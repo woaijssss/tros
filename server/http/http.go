@@ -47,6 +47,7 @@ func NewServer(opts ...ServerOption) *Server {
 		//gin.Logger(),
 		sentrygin.New(sentrygin.Options{Repanic: true}),
 		http4.AddTraceID,
+		//http4.AddUserID,
 	)
 	setRuntimeMode(e)
 	server := &Server{

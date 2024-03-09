@@ -108,7 +108,7 @@ func (gl *grpcLogger) beforePopulate(ctx context.Context, kv []interface{}, md m
 		"method", method,
 		"req_id", md.Get(HeaderRequestID),
 		"gw", middleware.IsRequestFromGRpcGateway(md),
-		constants.TraceId, context2.GenTraceID(ctx),
+		constants.TraceId, context2.GenTraceID(),
 	)
 	return kv
 }
