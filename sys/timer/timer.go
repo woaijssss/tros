@@ -19,10 +19,10 @@ func NewTimer(timeout time.Duration, workFunc func()) TrTimer {
 	return t
 }
 
-func (xt *trTimer) Reset(timeout time.Duration) bool {
-	return xt.Reset(timeout)
+func (tr *trTimer) Reset(timeout time.Duration) bool {
+	return tr.Reset(timeout)
 }
 
-func (xt *trTimer) Stop() bool {
-	return xt.Stop()
+func (tr *trTimer) Stop() bool {
+	return tr.Stop()
 }
