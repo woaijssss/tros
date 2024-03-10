@@ -15,7 +15,7 @@ type TimeDetail struct {
 }
 
 const (
-	noYear = "1-02"
+	noYear = "01-02"
 )
 
 // Time2Date 2006-01-02
