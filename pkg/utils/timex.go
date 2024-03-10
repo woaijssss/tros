@@ -14,6 +14,19 @@ type TimeDetail struct {
 	Second string `json:"second"`
 }
 
+const (
+	noYear = "1-02"
+)
+
+// Time2Date 2006-01-02
+func Time2Date(timeStr time.Time) string {
+	return timeStr.Format(time.DateOnly)
+}
+
+func Time2DateMonthOnly(timeStr time.Time) string {
+	return timeStr.Format(noYear)
+}
+
 func GetMessageId() string {
 	return fmt.Sprintf("%d", time.Now().Nanosecond())
 }
