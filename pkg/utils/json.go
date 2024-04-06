@@ -40,6 +40,9 @@ func ToJsonString(v any) (string, error) {
 
 func StringToJson[T any](s string) (T, error) {
 	var v T
+	if s == "" {
+		return v, nil
+	}
 	err := json.Unmarshal([]byte(s), &v)
 	return v, err
 }
