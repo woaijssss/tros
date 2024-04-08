@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/360EntSecGroup-Skylar/excelize v1.4.1
+	github.com/aliyun/aliyun-oss-go-sdk v3.0.2+incompatible
 	github.com/getsentry/sentry-go v0.25.0
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.9.1
@@ -91,6 +92,7 @@ require (
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect
 	golang.org/x/sys v0.13.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/time v0.3.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20231106174013-bbf56f31fb17 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22 // indirect

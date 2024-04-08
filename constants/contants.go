@@ -1,5 +1,7 @@
 package constants
 
+import "time"
+
 const (
 	Profile    = "profile"
 	TraceId    = "trace_id"
@@ -22,3 +24,5 @@ const (
 	CompanyId  = "company-id"
 	Product    = "product"
 )
+
+const GTimeout = time.Hour // 全局默认过期时间 1小时
