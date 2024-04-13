@@ -1,7 +1,6 @@
 package trerror
 
 import (
-	"gitee.com/idigpower/tros/lang"
 	"gitee.com/idigpower/tros/trerror/codes"
 )
 
@@ -161,11 +160,11 @@ func CustomDBError(code uint32, msg, reason string, args ...interface{}) *TrErro
 }
 
 func newByStdCode(code uint32, reason string, args ...interface{}) *TrError {
-	msg := codes.CodeAbstract(code, lang.Default())
+	msg := codes.CodeAbstract(code)
 	return NewF(code, msg, reason, args...)
 }
 
 func newByCode(code uint32, internalCode uint32, reason string, args ...interface{}) *TrError {
-	msg := codes.CodeAbstract(internalCode, lang.Default())
+	msg := codes.CodeAbstract(internalCode)
 	return NewErrorWithF(code, internalCode, msg, reason, args...)
 }

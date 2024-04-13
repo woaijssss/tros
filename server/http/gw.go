@@ -140,7 +140,7 @@ func gwErrorHandler(_ context.Context, _ *runtime.ServeMux, marshaler runtime.Ma
 
 	if len(s.Details()) == 0 {
 		// 全局异常details为空
-		ns = status.New(codes.Code(code), codes2.CodeAbstract(code, codes2.Default()))
+		ns = status.New(codes.Code(code), codes2.CodeAbstract(code))
 		ns, err = ns.WithDetails(&epb.ErrorInfo{
 			Reason: message,
 		})

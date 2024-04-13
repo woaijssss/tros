@@ -28,6 +28,10 @@ const (
 
 	ConfigurationError uint32 = 10101
 	DBError            uint32 = 10102
+
+	ContentIllegal uint32 = 10201
+	ImageIllegal   uint32 = 10202
+	VideoIllegal   uint32 = 10203
 )
 
 // CodeMap is a mapping for codes and error info
@@ -48,6 +52,9 @@ var codeAbstracts = map[uint32]string{
 	Unauthenticated:    "认证失败",
 	ConfigurationError: "配置错误",
 	DBError:            "数据库错误",
+	ContentIllegal:     "文字包含违规信息",
+	ImageIllegal:       "图片包含违规信息",
+	VideoIllegal:       "视频包含违规信息",
 }
 
 // grpcToCode is a mapping between gRPC codes and QT codes
@@ -134,7 +141,7 @@ func CodeToStatus(code uint32) int {
 }
 
 // CodeAbstract codes memo
-func CodeAbstract(code uint32, lang lang.Lang) string {
+func CodeAbstract(code uint32) string {
 	r, ok := codeAbstracts[code]
 	if !ok {
 		r = codeAbstracts[Unknown]

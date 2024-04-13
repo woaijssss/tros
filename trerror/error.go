@@ -61,7 +61,8 @@ func NewF(code uint32, message, reason string, args ...interface{}) *TrError {
 	if len(args) > 0 {
 		reason = fmt.Sprintf(reason, args...)
 	}
-	return New(code, message, reason, code)
+	//return New(code, message, reason, code)
+	return New(code, message)
 }
 
 // NewErrorWithF Error with reason fmt
@@ -69,14 +70,13 @@ func NewErrorWithF(code uint32, internalCode uint32, message, reason string, arg
 	if len(args) > 0 {
 		reason = fmt.Sprintf(reason, args...)
 	}
-	return New(code, message, reason, internalCode)
+	//return New(code, message, reason, internalCode)
+	return New(code, message)
 }
 
 // New Error with message and reason
-func New(code uint32, message, reason string, internalCode uint32) *TrError {
-	//metadata := map[string]string{
-	//	"app_id": conf.GetAppID(),
-	//}
+// func New(code uint32, message, reason string, internalCode uint32) *TrError {
+func New(code uint32, message string) *TrError {
 	return &TrError{
 		Code:    int32(code),
 		Message: message,
