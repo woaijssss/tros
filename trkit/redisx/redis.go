@@ -1,5 +1,7 @@
 package redisx
 
+import "gitee.com/idigpower/tros/conf"
+
 const (
 	HostDev     = "127.0.0.1:6379"
 	PasswordDev = "123456"
@@ -37,6 +39,17 @@ func GetRedisConf(env string) (conf RedisConfig) {
 	}
 	conf.RedisHost = HostProd
 	conf.RedisPassword = PasswordProd
+	return
+}
+
+func GetRedisConfV2() (redisConf RedisConfig) {
+	//if env == EnvOffline {
+	//	conf.RedisHost = HostDev
+	//	conf.RedisPassword = PasswordDev
+	//	return
+	//}
+	redisConf.RedisHost = conf.GetString("redis.host")
+	redisConf.RedisPassword = conf.GetString("redis.password")
 	return
 }
 

@@ -7,6 +7,7 @@ import (
 	trlogger "gitee.com/idigpower/tros/logx"
 	"gitee.com/idigpower/tros/server/http"
 	"gitee.com/idigpower/tros/trkit/mysqlx"
+	"gitee.com/idigpower/tros/trkit/redisx"
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/grpc"
 	"os"
@@ -103,6 +104,7 @@ func (app *App) Init() error {
 	}
 
 	mysqlx.InitMysqlX(app.ctx)
+	redisx.Setup(app.ctx)
 
 	return nil
 }

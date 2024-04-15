@@ -1,6 +1,7 @@
 package redisx
 
 import (
+	"context"
 	trlogger "gitee.com/idigpower/tros/logx"
 	"time"
 
@@ -16,12 +17,12 @@ var (
 	RedisDB       int
 )
 
-func Setup(env string) {
-	initRedis(env)
+func Setup(ctx context.Context) {
+	initRedis(ctx)
 }
 
-func RedisSetup(env string) {
-	initRedis(env)
+func RedisSetup(ctx context.Context) {
+	initRedis(ctx)
 }
 
 func SetupByHost(host, password string) {
@@ -58,9 +59,10 @@ func InitRedisByConf(conf *RedisConfig, env string) {
 	}
 }
 
-func initRedis(env string) {
-	Env = env
-	conf := GetRedisConf(env)
+func initRedis(ctx context.Context) {
+	//Env = env
+	//conf := GetRedisConf(env)
+	conf := GetRedisConfV2()
 	// 从配置文件获取redis的ip以及db
 	RedisHost = conf.RedisHost
 	RedisDB = RedisDB
@@ -115,10 +117,10 @@ func initRedisByHost(host, password string) {
 	}
 }
 
-func getRedisConn(context *gin.Context) redis.Conn {
+func getRedisConn(ctx context.Context) redis.Conn {
 	client := RedisClient.Get()
 	if client.Err() != nil {
-		trlogger.Fatalf(context, "Get redis string err %+v", client.Err())
+		trlogger.Fatalf(ctx, "Get redis string err %+v", client.Err())
 		//initRedis(Env)
 		initRedisByHost(RedisHost, RedisPassword)
 		return RedisClient.Get()
@@ -149,7 +151,7 @@ func ListAll(context *gin.Context, key string) ([]interface{}, error) {
 	return value, nil
 }
 
-func Get(context *gin.Context, key string) (string, error) {
+func Get(context context.Context, key string) (string, error) {
 	client := getRedisConn(context)
 
 	defer client.Close()
@@ -172,18 +174,18 @@ func Get(context *gin.Context, key string) (string, error) {
 	return value, nil
 }
 
-func Set(context *gin.Context, key, val string, expire int64) error {
-	client := getRedisConn(context)
+func Set(ctx context.Context, key, val string, expire int64) error {
+	client := getRedisConn(ctx)
 	defer client.Close()
 
 	if client.Err() != nil {
-		trlogger.Fatalf(context, "Get redis string err %+v", client.Err())
+		trlogger.Fatalf(ctx, "Get redis string err %+v", client.Err())
 		return client.Err()
 	}
 
 	_, err := client.Do("set", key, val, "ex", expire)
 	if err != nil {
-		trlogger.Fatalf(context, "Set redis string err %+v", err)
+		trlogger.Fatalf(ctx, "Set redis string err %+v", err)
 		return err
 	}
 	return err
