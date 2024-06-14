@@ -5,31 +5,33 @@ import (
 	"gitee.com/idigpower/tros/trerror"
 	"github.com/golang-jwt/jwt"
 	"reflect"
+	"time"
 )
 
+const userTokenKey = "trlink.com"
+
 type TokenInfo struct {
-	Uuid string `json:"uuid"`
-	//UserName string `json:"user_name"`
-	//UserId int64  `json:"user_id"`
-	UserId string `json:"user_id"`
-	//Phone    string `json:"phone"`
-	//Role     string `json:"role"`
-	//Password string `json:"password"`
-	//Expire   string `json:"expire"`
+	Sub               string `json:"sub"`
+	UserId            string `json:"user_id"`
+	CurrentTimeMillis string `json:"currentTimeMillis"`
+	Exp               int64  `json:"exp"`
+	Iat               int64  `json:"iat"`
+	Jti               string `json:"jti"`
 }
 
-func CreateToken(key string, tokenInfo *TokenInfo) string {
+func CreateToken(userNo string) string {
+	now := time.Now().Unix()
+	currentTimeMillis := now * 1000
+	secretKey := fmt.Sprintf("%s%s%d", userNo, userTokenKey, currentTimeMillis)
 	m := make(map[string]interface{}, 0)
-	//m["uuid"] = tokenInfo.Uuid
-	//m["user_name"] = tokenInfo.UserName
-	m["user_id"] = tokenInfo.UserId
-	//m["user_no"] = tokenInfo.UserNo
-	//m["role"] = tokenInfo.Role
-	//m["password"] = tokenInfo.Password
-	//m["expire"] = tokenInfo.Expire
-	//m["phone"] = tokenInfo.Phone
+	m["sub"] = userTokenKey
+	m["user_id"] = userNo
+	m["currentTimeMillis"] = fmt.Sprintf("%d", now*1000)
+	m["exp"] = now + 850000000
+	m["iat"] = now
+	m["jti"] = userNo
 
-	token := jwt.New(jwt.SigningMethodHS256)
+	token := jwt.New(jwt.SigningMethodHS512)
 	claims := make(jwt.MapClaims)
 
 	for index, val := range m {
@@ -37,16 +39,17 @@ func CreateToken(key string, tokenInfo *TokenInfo) string {
 	}
 
 	token.Claims = claims
-	tokenString, _ := token.SignedString([]byte(key))
+	tokenString, _ := token.SignedString([]byte(secretKey))
 	return tokenString
 }
 
-func ParseToken(key string, tokenString string) (*TokenInfo, error) {
-	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+func ParseToken(tokenString string) (*TokenInfo, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("ParseToken Unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte(key), nil
+		//key := fmt.Sprintf("%s%s%d", userNo, userTokenKey, currentTimeMillis)
+		return []byte(userTokenKey), nil
 	})
 
 	if token == nil || token.Valid == false || token.Claims == nil {
@@ -66,11 +69,14 @@ func ParseToken(key string, tokenString string) (*TokenInfo, error) {
 // 解析JWT，但不验证签名
 func ParseTokenWithoutVerify(tokenString string) (*TokenInfo, error) {
 	// golang和java服务通用的userId key
-	token, err := jwt.Parse(tokenString, nil)
-	if err != nil {
-		if _, ok := err.(*jwt.ValidationError); !ok {
-			return nil, trerror.DefaultTrError(fmt.Sprintf("Error parsing token: [%+v]", err))
-		}
+	token, _ := jwt.Parse(tokenString, nil)
+	//if err != nil {
+	//	if _, ok := err.(*jwt.ValidationError); !ok {
+	//		return nil, trerror.DefaultTrError(fmt.Sprintf("Error parsing token: [%+v]", err))
+	//	}
+	//}
+	if token == nil {
+		return nil, trerror.DefaultTrError(fmt.Sprintf("Error parsing token"))
 	}
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {

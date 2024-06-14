@@ -29,6 +29,7 @@ var (
 	TR_ILLEGAL_OPERATION     = &TrError{4010, "非法操作"}
 	TR_RECORD_NOT_FOUND      = &TrError{4011, "记录不存在"}
 	TR_EMAIL_REGISTERED      = &TrError{4012, "邮箱已被注册"}
+	TR_LOGIN_UNSUPPORT       = &TrError{4013, "暂不支持此方式登录"}
 
 	TR_ACCESS_TOO_FREQUENTLY = &TrError{99999, "访问太频繁"}
 )

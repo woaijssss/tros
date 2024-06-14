@@ -54,7 +54,7 @@ func Unimplemented(reason string, args ...interface{}) *TrError {
 	return newByStdCode(codes.Unimplemented, reason, args...)
 }
 
-// Internal return internal server Error
+// Internal return inner server Error
 func Internal(reason string, args ...interface{}) *TrError {
 	return newByStdCode(codes.Internal, reason, args...)
 }
@@ -134,7 +134,7 @@ func CustomUnimplementedError(code uint32, msg, reason string, args ...interface
 	return NewErrorWithF(code, codes.Unimplemented, msg, reason, args...)
 }
 
-// CustomInternalError return internal server Error
+// CustomInternalError return inner server Error
 func CustomInternalError(code uint32, msg, reason string, args ...interface{}) *TrError {
 	return NewErrorWithF(code, codes.Internal, msg, reason, args...)
 }

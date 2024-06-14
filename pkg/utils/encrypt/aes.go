@@ -6,39 +6,45 @@ import (
 	"crypto/cipher"
 )
 
-func Padding(src []byte, blockSize int) []byte {
-	padNum := blockSize - len(src)%blockSize
-	pad := bytes.Repeat([]byte{byte(padNum)}, padNum)
-	return append(src, pad...)
-}
-
-func UnPadding(src []byte) []byte {
-	n := len(src)
-	unpadNum := int(src[n-1])
-	return src[:n-unpadNum]
-}
-
-func Encrypt(src []byte, key []byte) []byte {
+// 加密函数
+func Encrypt(plaintext, key []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
-		return nil
+		return nil, err
 	}
-	src = Padding(src, block.BlockSize())
-	blockMode := cipher.NewCBCEncrypter(block, key)
-	blockMode.CryptBlocks(src, src)
-	return src
+
+	plaintext = PKCS7Padding(plaintext, block.BlockSize())
+	ciphertext := make([]byte, len(plaintext))
+	mode := cipher.NewCBCEncrypter(block, key)
+	mode.CryptBlocks(ciphertext, plaintext)
+
+	return ciphertext, nil
 }
 
-func Decrypt(src []byte, key []byte) []byte {
-	if len(src) == 0 {
-		return nil
+// 解密函数
+func Decrypt(ciphertext, key []byte) ([]byte, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
 	}
-	if len(src)%16 != 0 {
-		return nil
-	}
-	block, _ := aes.NewCipher(key)
-	blockMode := cipher.NewCBCDecrypter(block, key)
-	blockMode.CryptBlocks(src, src)
-	src = UnPadding(src)
-	return src
+
+	plaintext := make([]byte, len(ciphertext))
+	mode := cipher.NewCBCDecrypter(block, key)
+	mode.CryptBlocks(plaintext, ciphertext)
+
+	return PKCS7UnPadding(plaintext), nil
+}
+
+// PKCS7填充
+func PKCS7Padding(data []byte, blockSize int) []byte {
+	padding := blockSize - len(data)%blockSize
+	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
+	return append(data, padtext...)
+}
+
+// PKCS7去填充
+func PKCS7UnPadding(data []byte) []byte {
+	length := len(data)
+	unpadding := int(data[length-1])
+	return data[:(length - unpadding)]
 }

@@ -9,6 +9,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
+	"math/rand"
 )
 
 // CheckPermission 需要校验token并从中提取user_id的接口，都需要调用该函数
@@ -20,6 +21,17 @@ func CheckPermission(ctx context.Context) (string, error) {
 	return tokenInfo.UserId, err
 }
 
+// GenUserNoPrefix 生成用户编号的前5位
+func GenUserNoPrefix() string {
+	characters := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+	length := 5
+	//rand.Seed(time.Now().UnixNano())
+	result := make([]byte, length)
+	for i := 0; i < length; i++ {
+		result[i] = characters[rand.Intn(len(characters))]
+	}
+	return string(result)
+}
 func getUserInfoFromToken(ctx context.Context) (*utils.TokenInfo, error) {
 	// 从context中获取metadata
 	md, ok := metadata.FromIncomingContext(ctx)
