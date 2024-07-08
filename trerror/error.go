@@ -12,8 +12,8 @@ const (
 
 var (
 	TR_SUCCESS               = &TrError{200, "成功"}
-	TR_INVALID_PARAM         = &TrError{400, "无效参数"}
-	TR_ERROR                 = &TrError{500, "失败"}
+	TR_BAD_REQUEST           = &TrError{400, "无效的请求"}
+	TR_ERROR                 = &TrError{500, "服务器错误"}
 	TR_SYSTEM_ERROR          = &TrError{5001, "系统错误"}
 	TR_SYSTEM_BUSY           = &TrError{5002, "系统繁忙"}
 	TR_TIMEOUT               = &TrError{5003, "请求超时"}
@@ -39,8 +39,23 @@ type TrError struct {
 	Message string
 }
 
-func (xe *TrError) Error() string {
-	return xe.Message
+func (te *TrError) Error() string {
+	return te.Message
+}
+
+// GetMessage 建议使用，获取错误消息
+func (te *TrError) GetMessage() string {
+	return te.Message
+}
+
+// GetCodeInt32 建议使用，获取int32类型的错误码
+func (te *TrError) GetCodeInt32() int32 {
+	return te.Code
+}
+
+// GetCodeInt 建议使用，获取int类型的错误码
+func (te *TrError) GetCodeInt() int {
+	return int(te.Code)
 }
 
 func DefaultTrError(msg string) *TrError {
