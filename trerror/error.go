@@ -31,6 +31,9 @@ var (
 	TR_EMAIL_REGISTERED      = &TrError{4012, "邮箱已被注册"}
 	TR_LOGIN_UNSUPPORT       = &TrError{4013, "暂不支持此方式登录"}
 
+	// 数据库错误
+	DBNotFoundError = &TrError{Code: 80001, Message: "data not found"}
+
 	TR_ACCESS_TOO_FREQUENTLY = &TrError{99999, "访问太频繁"}
 )
 
