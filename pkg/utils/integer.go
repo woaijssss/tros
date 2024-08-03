@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"github.com/unknwon/com"
+	"math/rand"
 	"strconv"
 	"strings"
 )
@@ -112,4 +113,9 @@ func GetIntNotZeroOrDefault(i *int, dft int) int {
 		return dft
 	}
 	return *i
+}
+
+// GetRandomInt 获取随机数
+func GetRandomInt(min, max int) int {
+	return rand.Intn(max-min+1) + min
 }
