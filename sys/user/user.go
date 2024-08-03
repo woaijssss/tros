@@ -10,6 +10,7 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"math/rand"
+	"strconv"
 )
 
 // CheckPermission 需要校验token并从中提取user_id的接口，都需要调用该函数
@@ -55,4 +56,13 @@ func getUserInfoFromToken(ctx context.Context) (*utils.TokenInfo, error) {
 	}
 	ctx = context2.AddUserID(ctx, tokenInfo.UserId)
 	return tokenInfo, nil // 解析成功
+}
+
+// GetUserGender todo 临时的兼容，后面db里gender字段修改为整数类型后，此方法作废
+func GetUserGender(gender string) int32 {
+	gdi, err := strconv.Atoi(gender)
+	if err != nil {
+		return 0
+	}
+	return int32(gdi)
 }
