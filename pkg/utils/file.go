@@ -76,7 +76,7 @@ func copyFileContents(src, dst string) (err error) {
 	return
 }
 
-// ReadFile 获取本地图片内容
+// ReadFile 获取本地文件内容
 func ReadFile(file string) string {
 	f, err := os.Open(file)
 	if err != nil {
@@ -92,6 +92,19 @@ func ReadFile(file string) string {
 	}
 
 	return string(fd)
+}
+
+// SaveFile 将文本内容保存到本地
+func SaveFile(filepath, content string) error {
+	// 创建一个文件
+	file, err := os.Create(filepath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	// 将字符串写入文件
+	return ioutil.WriteFile(file.Name(), []byte(content), 0644)
 }
 
 // GetSize get the file size
