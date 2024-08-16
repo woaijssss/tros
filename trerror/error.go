@@ -2,6 +2,8 @@ package trerror
 
 import (
 	"fmt"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 const (
@@ -31,6 +33,10 @@ var (
 	TR_EMAIL_REGISTERED      = &TrError{4012, "邮箱已被注册"}
 	TR_LOGIN_UNSUPPORT       = &TrError{4013, "暂不支持此方式登录"}
 
+	// ugc校验错误
+	ContentIllegal = &TrError{10201, "文字包含违规信息"}
+	ImageIllegal   = &TrError{10202, "图片包含违规信息"}
+	VideoIllegal   = &TrError{10203, "视频包含违规信息"}
 	// 数据库错误
 	DBNotFoundError = &TrError{Code: 80001, Message: "data not found"}
 
@@ -54,6 +60,11 @@ func (te *TrError) GetMessage() string {
 // GetCodeInt32 建议使用，获取int32类型的错误码
 func (te *TrError) GetCodeInt32() int32 {
 	return te.Code
+}
+
+// GRPCStatus 需要继承该方法，才能正常返回应用定义的错误码
+func (te *TrError) GRPCStatus() *status.Status {
+	return status.New(codes.Code(te.Code), te.Message)
 }
 
 // GetCodeInt 建议使用，获取int类型的错误码
