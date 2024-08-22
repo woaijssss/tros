@@ -26,3 +26,10 @@ const (
 )
 
 const GTimeout = time.Hour // 全局默认过期时间 1小时
+
+type SystemEnv int32
+
+const (
+	Prod SystemEnv = 1
+	Test SystemEnv = 2
+)
