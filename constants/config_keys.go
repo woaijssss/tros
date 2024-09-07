@@ -6,26 +6,34 @@ const (
 )
 
 const (
-	AppId             = "app.app_id"
-	AppName           = "app.app_name"
-	AppVersion        = "app.app_version"
-	GlobalEnv         = "app.env"
-	GlobalHttpPort    = "app.httpPort"
-	GlobalGrpcPort    = "app.grpcPort"
-	GlobalMonitorPort = "app.monitorPort"
-	LogLevel          = "app.log.level"
-	LogPath           = "app.log.path"
+	AppId             = "app.app_id"      // 应用id
+	AppName           = "app.app_name"    // 应用名字
+	AppVersion        = "app.app_version" // 应用版本
+	GlobalEnv         = "app.env"         // 应用运行环境
+	GlobalHttpPort    = "app.httpPort"    // 监听http端口
+	GlobalGrpcPort    = "app.grpcPort"    // 监听grpc端口
+	GlobalMonitorPort = "app.monitorPort" // 监控Prometheus端口
+	LogLevel          = "app.log.level"   // 日志级别
+	LogPath           = "app.log.path"    // 日志路径
 
-	// MysqlUrl 数据库url
-	MysqlUrl = "mysql.url"
-	// MysqlPoolSize 最大连接数
-	MysqlPoolSize = "mysql.poolSize"
-	// MysqlMaxLife 连接的最大生命周期，单位是秒
-	MysqlMaxLife = "mysql.maxLife"
-	// MysqlMaxIdleCons 最大空闲连接数
-	MysqlMaxIdleCons = "mysql.maxIdleCons"
-	// MysqlMaxIdleTime 最大空闲时间，单位是秒
-	MysqlMaxIdleTime = "mysql.maxIdleTime"
-	// MysqlLog 该在该数据源上执行sql是是否需要把待执行的sql输出到日志
-	MysqlLog = "mysql.log"
+	MysqlUrl         = "mysql.url"         // 数据库url
+	MysqlPoolSize    = "mysql.poolSize"    // 最大连接数
+	MysqlMaxLife     = "mysql.maxLife"     // 连接的最大生命周期，单位是秒
+	MysqlMaxIdleCons = "mysql.maxIdleCons" // 最大空闲连接数
+	MysqlMaxIdleTime = "mysql.maxIdleTime" // 最大空闲时间，单位是秒
+	MysqlLog         = "mysql.log"         // 该在该数据源上执行sql是是否需要把待执行的sql输出到日志
+
+	IFlyTekId        = "iflytek.app_id"     // 科大讯飞api的appid
+	IFlyTekSecretKey = "iflytek.secret_key" // 科大讯飞api的secret
+
+	WechatAppid     = "wechat.app_id"     // 微信小程序的appid
+	WechatAppSecret = "wechat.app_secret" // 微信小程序的app_secret
+
+	AliOssBucket          = "oss.bucket"          // 阿里oss存储桶名字
+	AliOssUrl             = "oss.url"             // 阿里oss存储桶访问主地址
+	AliOssAccessKeyId     = "oss.accessKeyId"     // 阿里oss存储桶access_key
+	AliOssAccessKeySecret = "oss.accessKeySecret" // 阿里oss存储桶access_secret
+	AliOssBucketUrlPrefix = "oss.bucketUrlPrefix" // 阿里oss存储桶内容的访问前缀
+
+	AMapAppKey = "amap.appKey" // 高德地图的appkey
 )

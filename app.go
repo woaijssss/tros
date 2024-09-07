@@ -1,4 +1,4 @@
-// package tros 迅掣os
+// Package tros 友行os
 package tros
 
 import (
