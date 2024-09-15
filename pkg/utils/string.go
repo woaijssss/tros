@@ -3,6 +3,7 @@ package utils
 import (
 	"math"
 	"strconv"
+	"unicode"
 )
 
 func String2Int64(input string) int64 {
@@ -21,4 +22,14 @@ func SetEmpty(s string) string {
 	}
 
 	return s
+}
+
+// IsAllWhiteSpace 检查是否是空白符或只包含空格
+func IsAllWhiteSpace(s string) bool {
+	for _, c := range s {
+		if !unicode.IsSpace(c) {
+			return false
+		}
+	}
+	return true
 }
