@@ -2,8 +2,8 @@ package utils
 
 import (
 	"fmt"
-	"gitee.com/idigpower/tros/trerror"
 	"github.com/golang-jwt/jwt"
+	"github.com/woaijssss/tros/trerror"
 	"reflect"
 	"time"
 )

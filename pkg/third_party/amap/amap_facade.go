@@ -2,8 +2,8 @@ package amap
 
 import (
 	"context"
-	trlogger "gitee.com/idigpower/tros/logx"
-	"gitee.com/idigpower/tros/pkg/utils"
+	trlogger "github.com/woaijssss/tros/logx"
+	"github.com/woaijssss/tros/pkg/utils"
 )
 
 var Client = new(client)

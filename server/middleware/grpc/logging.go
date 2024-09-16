@@ -2,10 +2,10 @@ package grpc
 
 import (
 	"context"
-	"gitee.com/idigpower/tros/constants"
-	context2 "gitee.com/idigpower/tros/context"
-	trlogger "gitee.com/idigpower/tros/logx"
-	"gitee.com/idigpower/tros/server/middleware"
+	"github.com/woaijssss/tros/constants"
+	context2 "github.com/woaijssss/tros/context"
+	trlogger "github.com/woaijssss/tros/logx"
+	"github.com/woaijssss/tros/server/middleware"
 	"time"
 
 	grpclogging "github.com/grpc-ecosystem/go-grpc-middleware/logging"

@@ -3,8 +3,8 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"gitee.com/idigpower/tros/pkg/utils/encrypt"
 	"github.com/gin-gonic/gin"
+	"github.com/woaijssss/tros/pkg/utils/encrypt"
 	"net/http"
 	"sort"
 	"strings"

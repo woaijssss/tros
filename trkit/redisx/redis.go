@@ -1,6 +1,6 @@
 package redisx
 
-import "gitee.com/idigpower/tros/conf"
+import "github.com/woaijssss/tros/conf"
 
 const (
 	HostDev     = "127.0.0.1:6379"

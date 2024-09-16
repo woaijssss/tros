@@ -2,10 +2,10 @@ package context
 
 import (
 	"context"
-	"gitee.com/idigpower/tros/constants"
-	"gitee.com/idigpower/tros/pkg/utils/encrypt"
 	"github.com/gin-gonic/gin"
 	"github.com/grpc-ecosystem/go-grpc-middleware/util/metautils"
+	"github.com/woaijssss/tros/constants"
+	"github.com/woaijssss/tros/pkg/utils/encrypt"
 )
 
 type TrContext struct {

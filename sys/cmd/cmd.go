@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	trlogger "gitee.com/idigpower/tros/logx"
+	trlogger "github.com/woaijssss/tros/logx"
 	"os"
 	"os/exec"
 	"syscall"

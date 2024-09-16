@@ -6,9 +6,9 @@ import (
 	"crypto/sha1"
 	"encoding/json"
 	"fmt"
-	trlogger "gitee.com/idigpower/tros/logx"
-	"gitee.com/idigpower/tros/pkg/utils/encrypt"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
+	trlogger "github.com/woaijssss/tros/logx"
+	"github.com/woaijssss/tros/pkg/utils/encrypt"
 	"time"
 )
 

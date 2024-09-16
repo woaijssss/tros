@@ -1,8 +1,8 @@
 package trlogger
 
 import (
-	"gitee.com/idigpower/tros/constants"
 	"github.com/spf13/viper"
+	"github.com/woaijssss/tros/constants"
 )
 
 // Level type of log level

@@ -3,9 +3,9 @@ package user
 import (
 	"context"
 	"fmt"
-	"gitee.com/idigpower/tros/constants"
-	context2 "gitee.com/idigpower/tros/context"
-	"gitee.com/idigpower/tros/pkg/utils"
+	"github.com/woaijssss/tros/constants"
+	context2 "github.com/woaijssss/tros/context"
+	"github.com/woaijssss/tros/pkg/utils"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"

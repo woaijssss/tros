@@ -2,8 +2,8 @@ package http
 
 import (
 	"bytes"
-	trlogger "gitee.com/idigpower/tros/logx"
 	"github.com/gin-gonic/gin"
+	trlogger "github.com/woaijssss/tros/logx"
 	"io/ioutil"
 )
 

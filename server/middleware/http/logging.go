@@ -1,9 +1,9 @@
 package http
 
 import (
-	trlogger "gitee.com/idigpower/tros/logx"
-	"gitee.com/idigpower/tros/server/middleware"
 	"github.com/gin-gonic/gin"
+	trlogger "github.com/woaijssss/tros/logx"
+	"github.com/woaijssss/tros/server/middleware"
 )
 
 // HTTPLogger new http logger middleware

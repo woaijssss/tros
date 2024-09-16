@@ -2,7 +2,7 @@ package redisx
 
 import (
 	"context"
-	trlogger "gitee.com/idigpower/tros/logx"
+	trlogger "github.com/woaijssss/tros/logx"
 	"time"
 
 	"github.com/gin-gonic/gin"

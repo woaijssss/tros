@@ -2,10 +2,10 @@ package mysqlx
 
 import (
 	"context"
-	"gitee.com/idigpower/tros/conf"
-	trlogger "gitee.com/idigpower/tros/logx"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/rolandhe/daog"
+	"github.com/woaijssss/tros/conf"
+	trlogger "github.com/woaijssss/tros/logx"
 )
 
 var globalDatasource daog.Datasource

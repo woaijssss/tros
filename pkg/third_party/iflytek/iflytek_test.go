@@ -3,8 +3,8 @@ package iflytek
 import (
 	"context"
 	"fmt"
-	"gitee.com/idigpower/tros"
-	trlogger "gitee.com/idigpower/tros/logx"
+	"github.com/woaijssss/tros"
+	trlogger "github.com/woaijssss/tros/logx"
 	"os"
 	"testing"
 )

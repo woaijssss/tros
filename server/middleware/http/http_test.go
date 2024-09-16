@@ -1,7 +1,7 @@
 package http
 
 import (
-	trlogger "gitee.com/idigpower/tros/logx"
+	trlogger "github.com/woaijssss/tros/logx"
 	"net/http"
 	"net/http/httptest"
 	"sync"

@@ -2,8 +2,8 @@ package http
 
 import (
 	"context"
-	"gitee.com/idigpower/tros/server/middleware"
-	codes2 "gitee.com/idigpower/tros/trerror/codes"
+	"github.com/woaijssss/tros/server/middleware"
+	codes2 "github.com/woaijssss/tros/trerror/codes"
 	"github.com/gin-gonic/gin"
 	"github.com/gogo/protobuf/proto"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"

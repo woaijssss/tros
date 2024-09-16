@@ -1,7 +1,7 @@
 package trerror
 
 import (
-	"gitee.com/idigpower/tros/trerror/codes"
+	"github.com/woaijssss/tros/trerror/codes"
 )
 
 // Canceled returns Error for canceled

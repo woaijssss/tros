@@ -1,11 +1,11 @@
 package conf
 
 import (
-	"gitee.com/idigpower/tros/constants"
-	"gitee.com/idigpower/tros/sys"
 	"github.com/go-playground/validator/v10"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"github.com/woaijssss/tros/constants"
+	"github.com/woaijssss/tros/sys"
 	"os"
 	"sync"
 	"time"

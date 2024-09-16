@@ -1,4 +1,4 @@
-module gitee.com/idigpower/tros
+module github.com/woaijssss/tros
 
 go 1.19
 

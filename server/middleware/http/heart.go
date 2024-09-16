@@ -1,8 +1,8 @@
 package http
 
 import (
-	trlogger "gitee.com/idigpower/tros/logx"
 	"github.com/gin-gonic/gin"
+	trlogger "github.com/woaijssss/tros/logx"
 	"net/http"
 )
 

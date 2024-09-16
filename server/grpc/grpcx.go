@@ -2,12 +2,12 @@ package grpc
 
 import (
 	"context"
-	"gitee.com/idigpower/tros/conf"
-	trlogger "gitee.com/idigpower/tros/logx"
-	grpc3 "gitee.com/idigpower/tros/server/middleware/grpc"
-	"gitee.com/idigpower/tros/server/middleware/http"
 	go_grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
+	"github.com/woaijssss/tros/conf"
+	trlogger "github.com/woaijssss/tros/logx"
+	grpc3 "github.com/woaijssss/tros/server/middleware/grpc"
+	"github.com/woaijssss/tros/server/middleware/http"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"

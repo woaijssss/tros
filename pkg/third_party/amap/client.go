@@ -4,10 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	http2 "gitee.com/idigpower/tros/client/http"
-	"gitee.com/idigpower/tros/conf"
-	"gitee.com/idigpower/tros/constants"
-	trlogger "gitee.com/idigpower/tros/logx"
+	http2 "github.com/woaijssss/tros/client/http"
+	"github.com/woaijssss/tros/conf"
+	"github.com/woaijssss/tros/constants"
+	trlogger "github.com/woaijssss/tros/logx"
 	"strings"
 )
 

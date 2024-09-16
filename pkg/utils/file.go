@@ -3,7 +3,7 @@ package utils
 import (
 	"bufio"
 	"fmt"
-	"gitee.com/idigpower/tros/pkg/utils/encrypt"
+	"github.com/woaijssss/tros/pkg/utils/encrypt"
 	"io"
 	"io/ioutil"
 	"math/rand"

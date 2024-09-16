@@ -3,7 +3,7 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"gitee.com/idigpower/tros/trerror"
+	"github.com/woaijssss/tros/trerror"
 	"os"
 )
 

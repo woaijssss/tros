@@ -1,6 +1,6 @@
 package http
 
-import trlogger "gitee.com/idigpower/tros/logx"
+import trlogger "github.com/woaijssss/tros/logx"
 
 // HTTPConfig http日志打印配置
 type HTTPConfig struct {

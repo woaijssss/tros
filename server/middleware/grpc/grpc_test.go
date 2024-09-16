@@ -1,7 +1,7 @@
 package grpc
 
 import (
-	trlogger "gitee.com/idigpower/tros/logx"
+	trlogger "github.com/woaijssss/tros/logx"
 	"sync"
 	"testing"
 

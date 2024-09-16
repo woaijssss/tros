@@ -3,8 +3,8 @@ package http
 import (
 	"context"
 	"errors"
-	trlogger "gitee.com/idigpower/tros/logx"
 	"github.com/gin-contrib/cors"
+	trlogger "github.com/woaijssss/tros/logx"
 	"net/http"
 	"time"
 

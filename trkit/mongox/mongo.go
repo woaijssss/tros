@@ -1,7 +1,7 @@
 package mongox
 
 import (
-	"gitee.com/idigpower/tros/trerror"
+	"github.com/woaijssss/tros/trerror"
 )
 
 var MongoxErrNoFound = trerror.DefaultTrError("MONGO NO FOUND")

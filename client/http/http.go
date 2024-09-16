@@ -2,7 +2,7 @@ package http
 
 import (
 	"context"
-	trlogger "gitee.com/idigpower/tros/logx"
+	trlogger "github.com/woaijssss/tros/logx"
 	"io"
 	"net/http"
 )

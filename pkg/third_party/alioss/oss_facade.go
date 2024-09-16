@@ -2,11 +2,11 @@ package alioss
 
 import (
 	"context"
-	"gitee.com/idigpower/tros"
-	"gitee.com/idigpower/tros/conf"
-	"gitee.com/idigpower/tros/constants"
-	trlogger "gitee.com/idigpower/tros/logx"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
+	"github.com/woaijssss/tros"
+	"github.com/woaijssss/tros/conf"
+	"github.com/woaijssss/tros/constants"
+	trlogger "github.com/woaijssss/tros/logx"
 	"time"
 )
 

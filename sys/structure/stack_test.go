@@ -2,8 +2,8 @@ package structure
 
 import (
 	"fmt"
-	"gitee.com/idigpower/tros/context"
-	trlogger "gitee.com/idigpower/tros/logx"
+	"github.com/woaijssss/tros/context"
+	trlogger "github.com/woaijssss/tros/logx"
 	"testing"
 )
 

@@ -1,6 +1,6 @@
 package grpc
 
-import trlogger "gitee.com/idigpower/tros/logx"
+import trlogger "github.com/woaijssss/tros/logx"
 
 // GRpcConfig gRpc日志打印配置
 type GRpcConfig struct {

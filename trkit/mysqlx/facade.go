@@ -2,9 +2,9 @@ package mysqlx
 
 import (
 	"context"
-	context2 "gitee.com/idigpower/tros/context"
 	"github.com/rolandhe/daog"
 	txrequest "github.com/rolandhe/daog/tx"
+	context2 "github.com/woaijssss/tros/context"
 )
 
 // InitMysqlX 初始化myslqx

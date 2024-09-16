@@ -2,7 +2,7 @@
 package codes
 
 import (
-	"gitee.com/idigpower/tros/lang"
+	"github.com/woaijssss/tros/lang"
 	"net/http"
 
 	"google.golang.org/grpc/codes"

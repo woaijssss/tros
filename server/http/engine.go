@@ -1,9 +1,9 @@
 package http
 
 import (
-	"gitee.com/idigpower/tros/conf"
-	http2 "gitee.com/idigpower/tros/server/middleware/http"
 	"github.com/gin-gonic/gin"
+	"github.com/woaijssss/tros/conf"
+	http2 "github.com/woaijssss/tros/server/middleware/http"
 )
 
 func DefaultEngine() *gin.Engine {

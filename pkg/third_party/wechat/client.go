@@ -5,9 +5,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"gitee.com/idigpower/tros/client/http"
-	trlogger "gitee.com/idigpower/tros/logx"
-	"gitee.com/idigpower/tros/pkg/utils"
+	"github.com/woaijssss/tros/client/http"
+	trlogger "github.com/woaijssss/tros/logx"
+	"github.com/woaijssss/tros/pkg/utils"
 )
 
 type client struct {
