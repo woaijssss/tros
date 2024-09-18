@@ -76,7 +76,7 @@ Browse [this tros example](https://github.com/woaijssss/tros-example-server.git)
   // ListResponse response
   message ListResponse {
     // XXXX
-    int64 total = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "total desc"}];
+    int64 total = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "remark desc"}];
   }
   
   // ListRequest request
