@@ -18,7 +18,6 @@ require (
 	github.com/json-iterator/go v1.1.12
 	github.com/lestrrat-go/file-rotatelogs v2.3.0+incompatible
 	github.com/prometheus/client_golang v1.7.1
-	github.com/rolandhe/daog v0.0.31
 	github.com/satori/go.uuid v1.2.0
 	github.com/siddontang/go v0.0.0-20170517070808-cb568a3e5cc0
 	github.com/sirupsen/logrus v1.9.3
@@ -26,6 +25,7 @@ require (
 	github.com/stretchr/testify v1.8.4
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.7
 	github.com/unknwon/com v1.0.1
+	github.com/woaijssss/godbx v1.0.0
 	go.mongodb.org/mongo-driver v1.3.5
 	golang.org/x/net v0.17.0
 	golang.org/x/sync v0.3.0
