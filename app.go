@@ -1,4 +1,7 @@
-// Package tros 友行os
+// A quickly mysql access component.
+// Copyright 2024 The 范文瀚 Authors. All rights reserved.
+
+// Package tros golang OS
 package tros
 
 import (
