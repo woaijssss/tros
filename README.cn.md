@@ -11,7 +11,7 @@
 - [数据库访问层](#数据库访问层)
 
 ## 快速开始
-- [点击查看tros使用示例](https://gitee.com/idigpower/tros-example-server.git)
+- [点击查看tros使用示例](https://github.com/woaijssss/tros-example-server.git)
 
 ## 代码目录
   - |--**conf**: 配置文件管理
