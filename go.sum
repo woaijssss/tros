@@ -408,8 +408,6 @@ github.com/ugorji/go/codec v1.2.11 h1:BMaWp1Bb6fHwEtbplGBGJ498wD+LKlNSl25MjdZY4d
 github.com/ugorji/go/codec v1.2.11/go.mod h1:UNopzCgEMSXjBc6AOMqYvWC1ktqTAfzJZUZgYf6w6lg=
 github.com/unknwon/com v1.0.1 h1:3d1LTxD+Lnf3soQiD4Cp/0BRB+Rsa/+RTvz8GMMzIXs=
 github.com/unknwon/com v1.0.1/go.mod h1:tOOxU81rwgoCLoOVVPHb6T/wt8HZygqH5id+GNnlCXM=
-github.com/woaijssss/godbx v0.0.0-20240918045117-57db2af4efed h1:4TFBL9AXtEYwjOM6kEhMLooozipS5RJpS6y8Bpqm+oo=
-github.com/woaijssss/godbx v0.0.0-20240918045117-57db2af4efed/go.mod h1:yKpGWso8rq6wQjaJz84fEQNqH8aR1/YrZFiOLWdnDz8=
 github.com/woaijssss/godbx v1.0.0 h1:yfeQpY2pxvbJpS4WnVQsmPLZ/rddrwu2yzX3D68fK9I=
 github.com/woaijssss/godbx v1.0.0/go.mod h1:yKpGWso8rq6wQjaJz84fEQNqH8aR1/YrZFiOLWdnDz8=
 github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c h1:u40Z8hqBAAQyv+vATcGgV0YCnDjqSL7/q/JyPhhJSPk=
