@@ -3,56 +3,14 @@ package amap
 import (
 	"context"
 	trlogger "github.com/woaijssss/tros/logx"
-	"github.com/woaijssss/tros/pkg/utils"
 )
 
 var Client = new(client)
 
-type PlaceInfoV5 struct {
-	PoiId    string // poi id
-	Name     string // poi名称
-	Location *Location
-	Type     string // poi所属类型
-	PName    string // poi所属省份
-	CityName string // poi所属城市
-	AdName   string // poi所属区县
-	Address  string // poi详细地址
-
-	Cost     string // 人均消费
-	OpenTime string // 营业时间描述
-	Rating   string // 评分
-
-	Images []string // 地点相关图片
-}
 type Location struct {
 	LocationStr string  // 经纬度字符串，形如 113.538507,22.098750
 	Longitude   float64 // 经度
 	Latitude    float64 // 纬度
-}
-
-func (c *client) GetPlaceDetail(ctx context.Context, name string) (string, *PlaceInfoV5, error) {
-	trlogger.Infof(ctx, "GetPlaceDetail place name: [%s]", name)
-	// poi查询
-	response, err := c.getPlaceByName(ctx, name)
-	if err != nil {
-		trlogger.Errorf(ctx, "getPlaceByName err: [%+v]", err)
-		return "", nil, err
-	}
-
-	// 解析poi结果
-	rawData, placeInfoV5, err := c.parsePoiResult(ctx, response)
-	if err != nil {
-		return "", nil, err
-	}
-
-	// 格式化原始数据
-	rawDataStr, err := utils.ToJsonString(rawData)
-	if err != nil {
-		trlogger.Errorf(ctx, "utils.ToJsonString PlaceInfoV5 raw data err: [%+v]", err)
-		return "", placeInfoV5, err
-	}
-	trlogger.Infof(ctx, "GetPlaceDetail place by name success")
-	return rawDataStr, placeInfoV5, err
 }
 
 func (c *client) ParseLocation(ctx context.Context, name string) (*Location, error) {
@@ -117,4 +75,22 @@ func (c *client) GetLiveWeather(ctx context.Context, adCode int64) (*GetLiveWeat
 		Humidity:      live.Humidity,
 		ReportTime:    live.ReportTime,
 	}, nil
+}
+
+type SearchScenicByNameOption struct {
+	Name string
+}
+
+type SearchScenicByNameResponse struct {
+	Pois  []*Poi // 点位合集
+	Total int32  // 总数
+}
+
+// SearchScenicByName 根据名字搜索景点
+func (c *client) SearchScenicByName(ctx context.Context, opt *SearchScenicByNameOption) (*SearchScenicByNameResponse, error) {
+	if opt == nil {
+		return &SearchScenicByNameResponse{}, nil
+	}
+
+	return c.searchScenicByName(ctx, opt)
 }

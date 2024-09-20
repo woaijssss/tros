@@ -8,6 +8,7 @@ import (
 	"github.com/woaijssss/tros/conf"
 	"github.com/woaijssss/tros/constants"
 	trlogger "github.com/woaijssss/tros/logx"
+	"github.com/woaijssss/tros/pkg/utils"
 	"strings"
 )
 
@@ -15,8 +16,8 @@ type client struct {
 }
 
 const (
-	placeDetailUrlTemplateV3 = "https://restapi.amap.com/v3/place/text?keywords=%s&city=beijing&offset=1&page=1&key=%s&extensions=all"
-	placeDetailUrlTemplateV5 = "https://restapi.amap.com/v5/place/text?keywords=%s&offset=1&page_size=1&page_num=1&key=%s&extensions=all&show_fields=business,photos"
+	scenicUrlTemplateV3 = "https://restapi.amap.com/v3/place/text?keywords=%s&city=beijing&offset=1&page=1&key=%s&extensions=all"
+	scenicUrlTemplateV5 = "https://restapi.amap.com/v5/place/text?types=%s&keywords=%s&offset=1&page_size=10&page_num=1&key=%s&extensions=all&show_fields=business,photos"
 
 	// 逆地理编码接口地址
 	/// 返回基本地址信息
@@ -31,13 +32,6 @@ const (
 	weatherLive = "https://restapi.amap.com/v3/weather/weatherInfo?extensions=base&output=JSON&key=%s&city=%d"
 )
 
-func (c *client) getPlaceByName(ctx context.Context, name string) (*http2.Response, error) {
-	url := fmt.Sprintf(placeDetailUrlTemplateV5, name, conf.Get(constants.AMapAppKey))
-	httpClient := http2.NewHttpClient()
-	httpClient.SetHeader("Content-Type", "application/x-www-form-urlencoded")
-	return httpClient.Get(ctx, url)
-}
-
 // commonResponse 高德返回的基本结构（所有接口都需要此参数）
 type commonResponse struct {
 	Status string `json:"status"` // 本次API访问状态，如果成功返回1，如果失败返回0。
@@ -48,38 +42,30 @@ type commonResponse struct {
 type response struct {
 	Status string `json:"status"` // 本次API访问状态，如果成功返回1，如果失败返回0。
 	Info   string `json:"info"`
-	Pois   []*poi `json:"pois"`
+	Count  string `json:"count"` // 本次API访问的总数
+	Pois   []*Poi `json:"pois"`
 }
 
-type pois struct { // poi完整集合
-	Poi      *poi      `json:"poi"`
-	Children *children `json:"children"`
-	Business *business `json:"business"`
-	Indoor   *indoor   `json:"indoor"`
-	Navi     *navi     `json:"navi"`
-	Photos   []*photos `json:"photos"`
-}
+type Poi struct { // poi完整集合
+	Id     string `json:"id"`
+	Parent string `json:"parent"`
+	Name   string `json:"name"`
 
-type poi struct {
-	Name     string `json:"name"`
-	Id       string `json:"id"`
 	Location string `json:"location"`
-	Type     string `json:"type"`
-	TypeCode string `json:"typecode"`
-	PName    string `json:"pname"`
-	CityName string `json:"cityname"`
-	AdName   string `json:"adname"`
 	Address  string `json:"address"`
+	TypeCode string `json:"typecode"`
 	PCode    string `json:"pcode"`
 	AdCode   string `json:"adcode"`
 	CityCode string `json:"citycode"`
 
-	Children *children `json:"children"`
+	Photos []*photos `json:"photos"`
+
 	Business *business `json:"business"`
+	Children *children `json:"children"`
 	Indoor   *indoor   `json:"indoor"`
 	Navi     *navi     `json:"navi"`
-	Photos   []*photos `json:"photos"`
 }
+
 type children struct {
 	Id       string `json:"id"`
 	Name     string `json:"name"`
@@ -90,14 +76,16 @@ type children struct {
 }
 type business struct {
 	BusinessArea  string `json:"business_area"`
+	OpenTime      string `json:"opentime"`
 	OpenTimeToday string `json:"opentime_today"`
 	OpenTimeWeek  string `json:"opentime_week"`
 	Tel           string `json:"tel"`
-	Tag           string `json:"tag"`
+	Feature       string `json:"feature"`
 	Rating        string `json:"rating"`
 	Cost          string `json:"cost"`
-	ParkingType   string `json:"parking_type"`
 	Alias         string `json:"alias"`
+	KeyTag        string `json:"keytag"`
+	RecTag        string `json:"rectag"`
 }
 type indoor struct {
 	IndoorMap string `json:"indoor_map"`
@@ -114,62 +102,6 @@ type navi struct {
 type photos struct {
 	Title string `json:"title"`
 	Url   string `json:"url"`
-}
-
-func (c *client) parsePoiResult(ctx context.Context, resp *http2.Response) (*response, *PlaceInfoV5, error) {
-	var err error
-	//// 从响应体中读取数据
-	//respBody, _ := ioutil.ReadAll(resp.Body)
-	//// 将JSON格式的响应转换为map类型
-	//var result map[string]interface{}
-	//result, err := utils.ByteToJson[map[string]interface{}](respBody)
-	//if err != nil {
-	//	trlogger.Errorf(ctx, "http response ByteToJson err: [%+v]", err)
-	//	return nil, err
-	//}
-	//fmt.Println(result)
-
-	var data response
-	err = http2.ResToObj(resp, &data)
-	if err != nil {
-		trlogger.Errorf(ctx, "parsePoiResult http2.ResToObj err: [%+v]", err)
-		return nil, nil, err
-	}
-	trlogger.Errorf(ctx, "parsePoiResult response: [%+v]", data)
-	if len(data.Pois) != 1 {
-		return &data, nil, fmt.Errorf("parsePoiResult poi not 1, [%d]", len(data.Pois))
-	}
-	// 输出查询到的详情信息
-	//pois = data.Pois
-	//poiObjs := pois[0].(map[string]interface{})
-	//business := pois[0].(map[string]interface{})["business"].(map[string]interface{})
-	//photos := pois[0].(map[string]interface{})["photos"].([]interface{})
-	r := &PlaceInfoV5{
-		PoiId:    data.Pois[0].Id,
-		Name:     data.Pois[0].Name,
-		Type:     data.Pois[0].Type,
-		PName:    data.Pois[0].PName,
-		CityName: data.Pois[0].CityName,
-		AdName:   data.Pois[0].AdName,
-		Address:  data.Pois[0].Address,
-
-		Cost:     data.Pois[0].Business.Cost,
-		OpenTime: data.Pois[0].Business.OpenTimeWeek,
-		Rating:   data.Pois[0].Business.Rating,
-	}
-
-	l, err := parseLocation(ctx, data.Pois[0].Location)
-	if err != nil {
-		trlogger.Errorf(ctx, "parseLocation err: [%+v]", err)
-		return &data, nil, err
-	}
-	r.Location = l
-
-	for _, v := range data.Pois[0].Photos {
-		r.Images = append(r.Images, v.Url)
-	}
-
-	return &data, r, nil
 }
 
 // ///////////////////////////////////////////////////// 路径规划结构
@@ -342,4 +274,33 @@ func (c *client) getLiveWeather(ctx context.Context, adCode int64) (*weatherLive
 	}
 
 	return data.Lives[0], nil
+}
+
+func (c *client) searchScenicByName(ctx context.Context, opt *SearchScenicByNameOption) (*SearchScenicByNameResponse, error) {
+	result := &SearchScenicByNameResponse{}
+
+	url := fmt.Sprintf(scenicUrlTemplateV5, aMapTypeCodesScenicSpot, opt.Name, conf.Get(constants.AMapAppKey))
+	httpClient := http2.NewHttpClient()
+	httpClient.SetHeader("Content-Type", "application/x-www-form-urlencoded")
+	resp, err := httpClient.Get(ctx, url)
+	if err != nil {
+		trlogger.Errorf(ctx, "getPlaceByName err: [%+v]", err)
+		return result, err
+	}
+
+	var data response
+	err = http2.ResToObj(resp, &data)
+	if err != nil {
+		trlogger.Errorf(ctx, "parsePoiResult http2.ResToObj err: [%+v]", err)
+		return result, err
+	}
+	trlogger.Errorf(ctx, "parsePoiResult response: [%+v]", data)
+
+	for _, poi := range data.Pois {
+		result.Pois = append(result.Pois, poi)
+	}
+
+	result.Total = utils.String2Int32(data.Count)
+
+	return result, nil
 }
