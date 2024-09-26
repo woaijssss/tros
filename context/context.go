@@ -8,6 +8,7 @@ import (
 	"github.com/woaijssss/tros/constants"
 	"github.com/woaijssss/tros/pkg/utils/encrypt"
 	"google.golang.org/grpc/metadata"
+	"strings"
 )
 
 type TrContext struct {
@@ -94,8 +95,16 @@ func InsertRemoteIp(ctx context.Context) context.Context {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if ok {
 		if ipHeaders, ok := md["x-forwarded-for"]; ok && len(ipHeaders) > 0 {
-			fmt.Println("Remote IP:", ipHeaders[0])
-			return context.WithValue(ctx, constants.RemoteIp, ipHeaders[0])
+			/*
+				The IP passed in by grpc gateway may still have "127.0.0.1" or other IPs after the real IP, so a replacement is needed
+			*/
+			ips := strings.Split(ipHeaders[0], ",")
+			ip := ""
+			if len(ips) >= 1 {
+				ip = ips[0]
+			}
+			fmt.Println("Remote IP:", ip)
+			return context.WithValue(ctx, constants.RemoteIp, ip)
 		}
 	}
 	if c, ok := ctx.(*gin.Context); ok {
