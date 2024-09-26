@@ -1,7 +1,9 @@
 package http
 
 import (
+	"bytes"
 	"context"
+	"encoding/xml"
 	trlogger "github.com/woaijssss/tros/logx"
 	"io"
 	"net/http"
@@ -17,7 +19,14 @@ func (c *Client) SetHeader(k, v string) {
 
 func (c *Client) Post(ctx context.Context, url string, body io.Reader) (*Response, error) {
 	return c.send(ctx, http.MethodPost, url, body)
+}
 
+func (c *Client) PostXml(ctx context.Context, url string, data any) (*Response, error) {
+	xmlData, err := xml.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+	return c.sendXml(ctx, http.MethodPost, url, xmlData)
 }
 
 func (c *Client) Get(ctx context.Context, url string) (*Response, error) {
@@ -41,10 +50,11 @@ func (c *Client) GetHeader(k string) string {
 	return v
 }
 
+// json请求
 func (c *Client) send(ctx context.Context, method, url string, body io.Reader) (*Response, error) {
 	req, err := http.NewRequest(method, url, body)
 	if err != nil {
-		trlogger.Errorf(ctx, "new http request with %s err: [%+v]", method, err)
+		trlogger.Errorf(ctx, "new http json request with %s err: [%+v]", method, err)
 		return nil, err
 	}
 
@@ -54,7 +64,26 @@ func (c *Client) send(ctx context.Context, method, url string, body io.Reader) (
 
 	resp, err := c.hc.Do(req)
 	if err != nil {
-		trlogger.Errorf(ctx, "do http with %s err: [%+v]", method, err)
+		trlogger.Errorf(ctx, "do http json with %s err: [%+v]", method, err)
+		return nil, err
+	}
+
+	return &Response{resp}, nil
+}
+
+// xml请求
+func (c *Client) sendXml(ctx context.Context, method, url string, xmlData []byte) (*Response, error) {
+	req, err := http.NewRequest(method, url, bytes.NewBuffer(xmlData))
+	if err != nil {
+		trlogger.Errorf(ctx, "new http xml request with %s err: [%+v]", method, err)
+		return nil, err
+	}
+
+	req.Header.Set("Content-Type", "application/xml")
+
+	resp, err := c.hc.Do(req)
+	if err != nil {
+		trlogger.Errorf(ctx, "do http xml with %s err: [%+v]", method, err)
 		return nil, err
 	}
 

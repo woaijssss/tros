@@ -16,6 +16,7 @@ var (
 	TR_SUCCESS               = &TrError{200, "成功"}
 	TR_BAD_REQUEST           = &TrError{400, "无效的请求"}
 	TR_ERROR                 = &TrError{500, "服务器错误"}
+	TR_INVALID_ERROR         = &TrError{4000, "未知的错误类型"}
 	TR_SYSTEM_ERROR          = &TrError{5001, "系统错误"}
 	TR_SYSTEM_BUSY           = &TrError{5002, "系统繁忙"}
 	TR_TIMEOUT               = &TrError{5003, "请求超时"}

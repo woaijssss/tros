@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"github.com/woaijssss/tros/trerror"
 	"os"
+	"reflect"
+	"sort"
+	"strings"
 )
 
 func SaveJson(marshal []byte, jsonFile string) (err error) {
@@ -64,4 +67,54 @@ func MapToJson[T any](m map[string]interface{}) (T, error) {
 		return t, trerror.DefaultTrError(fmt.Sprintf("unmarshal to struct err: [%+v]", err))
 	}
 	return t, nil
+}
+
+// StructToKeyValueSorted
+/*
+	Concatenate the structure into a key=value format for parameters, and sort them in ASCII lexicographic order by parameter name
+*/
+func StructToKeyValueSorted(s any) string {
+	v := reflect.ValueOf(s)
+	t := v.Type()
+
+	if v.Kind() != reflect.Struct {
+		return ""
+	}
+
+	parts := make([]string, 0)
+	for i := 0; i < v.NumField(); i++ {
+		fieldValue := v.Field(i).Interface()
+		key := t.Field(i).Tag
+		value := fmt.Sprintf("%v", fieldValue)
+		parts = append(parts, fmt.Sprintf("%s=%s", key, value))
+	}
+
+	sort.Strings(parts)
+	return strings.Join(parts, "&")
+}
+
+// StructToJSONKeyValueSorted
+/*
+	Concatenate the structure tag into a key=value format for parameters, and sort them in ASCII lexicographic order by parameter name
+*/
+func StructToJSONKeyValueSorted(s interface{}) string {
+	v := reflect.ValueOf(s)
+	t := v.Type()
+
+	if v.Kind() != reflect.Struct {
+		return ""
+	}
+
+	parts := make([]string, 0)
+	for i := 0; i < v.NumField(); i++ {
+		fieldValue := v.Field(i).Interface()
+		jsonTag := t.Field(i).Tag.Get("json")
+		if jsonTag != "" {
+			value := fmt.Sprintf("%v", fieldValue)
+			parts = append(parts, fmt.Sprintf("%s=%s", jsonTag, value))
+		}
+	}
+
+	sort.Strings(parts)
+	return strings.Join(parts, "&")
 }

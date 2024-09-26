@@ -360,3 +360,81 @@ func (abc Abc) String() string {
 func (abc Abc) Alphabet() string {
 	return string(abc.alphabet)
 }
+
+// Snow-Flake generate new long ID
+const (
+	twepoch          = 1420041600000 // start time cutoff
+	workerIDBits     = 5             // number of digits occupied by the machine ID
+	datacenterIDBits = 5             // number of digits occupied by the data identifier id
+	sequenceBits     = 12            // number of digits occupied by the sequence in the ID
+
+	/*
+		The maximum supported machine ID is 31
+		this shift algorithm can quickly calculate the maximum decimal number that can be represented by a few binary digits
+	*/
+	maxWorkerID     = -1 ^ (-1 << workerIDBits)
+	maxDatacenterID = -1 ^ (-1 << datacenterIDBits) // maximum supported data identifier ID is 31
+	// maximum value of the generated sequence is 4095 (0x111111111111=0xfff=4095)
+	maxSequence = -1 ^ (-1 << sequenceBits)
+
+	// machine ID shifted 12 digits to the left
+	workerIDShift = sequenceBits
+	// shift the data identifier ID to the left by 17 digits (12+5)
+	datacenterIDShift = sequenceBits + workerIDBits
+	// shift the deadline to the left by 22 digits(5+5+12)
+	timestampLeftShift = sequenceBits + workerIDBits + datacenterIDBits
+)
+
+type Snowflake struct {
+	mu            sync.Mutex
+	lastTimestamp int64
+	workerID      int64
+	datacenterID  int64
+	sequence      int64
+}
+
+// NewSnowflake Init Snow-Flake worker
+func NewSnowflake(workerID, datacenterID int64) (*Snowflake, error) {
+	if workerID < 0 || workerID > maxWorkerID {
+		return nil, fmt.Errorf("worker ID must be between 0 and %d", maxWorkerID)
+	}
+	if datacenterID < 0 || datacenterID > maxDatacenterID {
+		return nil, fmt.Errorf("datacenter ID must be between 0 and %d", maxDatacenterID)
+	}
+	return &Snowflake{
+		workerID:      workerID,
+		datacenterID:  datacenterID,
+		lastTimestamp: -1,
+		sequence:      0,
+	}, nil
+}
+
+// NextID control concurrent frequency to generate the latest ID
+func (s *Snowflake) NextID() int64 {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	timestamp := time.Now().UnixNano() / 1e6
+	if timestamp < s.lastTimestamp {
+		return 0
+	}
+
+	if s.lastTimestamp == timestamp {
+		s.sequence = (s.sequence + 1) & maxSequence
+		if s.sequence == 0 {
+			for timestamp <= s.lastTimestamp {
+				timestamp = time.Now().UnixNano() / 1e6
+			}
+		}
+	} else {
+		s.sequence = 0
+	}
+
+	s.lastTimestamp = timestamp
+	return ((timestamp - twepoch) << timestampLeftShift) |
+		(s.datacenterID << datacenterIDShift) |
+		(s.workerID << workerIDShift) |
+		s.sequence
+}
+
+// Snow-Flake generate new long ID end

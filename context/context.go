@@ -2,10 +2,12 @@ package context
 
 import (
 	"context"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/grpc-ecosystem/go-grpc-middleware/util/metautils"
 	"github.com/woaijssss/tros/constants"
 	"github.com/woaijssss/tros/pkg/utils/encrypt"
+	"google.golang.org/grpc/metadata"
 )
 
 type TrContext struct {
@@ -86,6 +88,20 @@ func InsertTraceID(ctx context.Context) context.Context {
 	}
 
 	return AddTraceID(ctx, s)
+}
+
+func InsertRemoteIp(ctx context.Context) context.Context {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if ok {
+		if ipHeaders, ok := md["x-forwarded-for"]; ok && len(ipHeaders) > 0 {
+			fmt.Println("Remote IP:", ipHeaders[0])
+			return context.WithValue(ctx, constants.RemoteIp, ipHeaders[0])
+		}
+	}
+	if c, ok := ctx.(*gin.Context); ok {
+		c.Set(constants.RemoteIp, c.RemoteIP())
+	}
+	return ctx
 }
 
 func AddTraceID(ctx context.Context, traceId string) context.Context {

@@ -2,8 +2,18 @@ package utils
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 )
+
+func GetCurrentTimestampInt() int64 {
+	return time.Now().Unix()
+}
+
+func GetCurrentTimestampString() string {
+	seconds := time.Now().Unix()
+	return strconv.FormatInt(seconds, 10)
+}
 
 type TimeDetail struct {
 	Year   string `json:"year"`

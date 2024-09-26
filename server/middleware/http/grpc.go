@@ -9,7 +9,8 @@ import (
 // UnaryServerInterceptor returns unary gRpc tracing middleware
 func UnaryServerInterceptor() grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
-		ctx = context2.InsertTraceID(ctx)
+		ctx = context2.InsertTraceID(ctx)  // set log id
+		ctx = context2.InsertRemoteIp(ctx) // set remote ip
 
 		return handler(ctx, req)
 	}

@@ -28,6 +28,9 @@ const (
 
 	WechatAppid     = "wechat.app_id"     // 微信小程序的appid
 	WechatAppSecret = "wechat.app_secret" // 微信小程序的app_secret
+	WechatMchId     = "wechat.mch_id"     // 微信商户id
+	WechatApiV2Key  = "wechat.apiv2_key"  // 微信支付的ApiV2密钥
+	WechatApiV3Key  = "wechat.apiv3_key"  // 微信支付的ApiV3密钥
 
 	AliOssBucket          = "oss.bucket"          // 阿里oss存储桶名字
 	AliOssUrl             = "oss.url"             // 阿里oss存储桶访问主地址

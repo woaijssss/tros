@@ -24,7 +24,7 @@ func EncodeMD5(value string) string {
 	return hex.EncodeToString(m.Sum(nil))
 }
 
-// EncodeMD5 md5 encryption
+// EncodeMD5Byte md5 encryption
 func EncodeMD5Byte(value string) []byte {
 	m := md5.New()
 	m.Write([]byte(value))
@@ -35,7 +35,7 @@ func EncodeMD5Byte(value string) []byte {
 	return dst
 }
 
-// EncodeMD5 md5 encryption
+// EncodeMD5Upper md5 encryption all upper
 func EncodeMD5Upper(value string) string {
 	m := md5.New()
 	m.Write([]byte(value))
