@@ -119,3 +119,31 @@ func TimeCompare(timeBefore, timeAfter string) bool {
 	}
 	return false
 }
+
+// CalcAge Calculate birthday based on date, date format: yyyy MM DD
+func CalcAge(birthdayStr string) (int32, error) {
+	birthDate, err := time.Parse(time.DateOnly, birthdayStr)
+	if err != nil {
+		return 0, err
+	}
+	currentTime := time.Now()
+	age := int32(currentTime.Year() - birthDate.Year())
+	if currentTime.Month() < birthDate.Month() || (currentTime.Month() == birthDate.Month() && currentTime.Day() < birthDate.Day()) {
+		age--
+	}
+	return age, nil
+}
+
+// CalcAgeWithoutErr Calculate birthday based on date, date format: yyyy-MM-DD, return without err
+func CalcAgeWithoutErr(birthdayStr string) int32 {
+	birthDate, err := time.Parse(time.DateOnly, birthdayStr)
+	if err != nil {
+		return -1
+	}
+	currentTime := time.Now()
+	age := int32(currentTime.Year() - birthDate.Year())
+	if currentTime.Month() < birthDate.Month() || (currentTime.Month() == birthDate.Month() && currentTime.Day() < birthDate.Day()) {
+		age--
+	}
+	return age
+}
