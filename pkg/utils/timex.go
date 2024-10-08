@@ -147,3 +147,19 @@ func CalcAgeWithoutErr(birthdayStr string) int32 {
 	}
 	return age
 }
+
+// GetMinDateTime Retrieve the minimum date formats for the current time's day
+func GetMinDateTime() string {
+	now := time.Now()
+	startOfDay := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
+	// 将time.Time类型转换为指定格式的string类型
+	return startOfDay.Format(time.DateTime)
+}
+
+// GetMaxDateTime Retrieve the maximum date formats for the current time's day
+func GetMaxDateTime() string {
+	now := time.Now()
+	startOfDay := time.Date(now.Year(), now.Month(), now.Day(), 23, 59, 59, 0, now.Location())
+	// 将time.Time类型转换为指定格式的string类型
+	return startOfDay.Format(time.DateTime)
+}
