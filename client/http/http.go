@@ -39,7 +39,7 @@ func (c *Client) GetWithReader(ctx context.Context, url string) ([]byte, error) 
 		return nil, err
 	}
 
-	return read(resp)
+	return readResponse(resp)
 }
 
 func (c *Client) GetHeader(k string) string {
@@ -93,6 +93,10 @@ func (c *Client) sendXml(ctx context.Context, method, url string, xmlData []byte
 type Client struct {
 	hc     *http.Client
 	header map[string]string
+}
+
+type Request struct {
+	*http.Request
 }
 
 type Response struct {
