@@ -11,7 +11,7 @@ import (
 /*
 	Concatenate the structure tag into a key=value format for parameters, and sort them in ASCII lexicographic order by parameter name
 */
-func StructToXMLKeyValueSorted(s interface{}) string {
+func StructToXMLKeyValueSorted(s interface{}, skipKeys []string) string {
 	v := reflect.ValueOf(s)
 	t := v.Type()
 
@@ -23,7 +23,7 @@ func StructToXMLKeyValueSorted(s interface{}) string {
 	for i := 0; i < v.NumField(); i++ {
 		fieldValue := v.Field(i).Interface()
 		xmlTag := t.Field(i).Tag.Get("xml")
-		if xmlTag != "" {
+		if xmlTag != "" && !In(xmlTag, skipKeys) && fieldValue != "" {
 			value := fmt.Sprintf("%v", fieldValue)
 			parts = append(parts, fmt.Sprintf("%s=%s", xmlTag, value))
 		}

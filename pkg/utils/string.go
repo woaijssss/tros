@@ -7,6 +7,16 @@ import (
 	"unicode"
 )
 
+func In(s string, lst []string) bool {
+	for _, l := range lst {
+		if l == s {
+			return true
+		}
+	}
+
+	return false
+}
+
 func String2Int32(s string) int32 {
 	n, err := strconv.Atoi(s)
 	if err != nil {

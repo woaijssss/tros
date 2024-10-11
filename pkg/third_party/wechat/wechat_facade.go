@@ -166,9 +166,11 @@ type WxRequestPaymentObject struct {
 
 // MiniPayOrder 微信小程序预支付订单接口
 func (c *client) MiniPayOrder(ctx context.Context, opt *MiniPayOrderOption) (*MiniPayOrderResponse, error) {
-	signature := utils.StructToXMLKeyValueSorted(*opt)
-	stringSignTemp := fmt.Sprintf("%s&key=%s", signature, c.wechatPayApiV2Key)
-	sign := encrypt.EncodeMD5Upper(stringSignTemp)
+	//signature := utils.StructToXMLKeyValueSorted(*opt)
+	//stringSignTemp := fmt.Sprintf("%s&key=%s", signature, c.wechatPayApiV2Key)
+	//sign := encrypt.EncodeMD5Upper(stringSignTemp)
+
+	sign := c.Signature(*opt, []string{})
 
 	response, err := c.miniPayOrderRequest(ctx, &miniPayOrderOption{
 		AppId:          opt.AppId,
