@@ -6,6 +6,7 @@ import (
 	"github.com/woaijssss/tros/constants"
 	context2 "github.com/woaijssss/tros/context"
 	"github.com/woaijssss/tros/pkg/utils"
+	"github.com/woaijssss/tros/trerror"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
@@ -20,6 +21,10 @@ func CheckPermission(ctx context.Context) (string, error) {
 		return "", err
 	}
 	return tokenInfo.UserId, err
+}
+
+func GetTokenFromContext(ctx context.Context) (*utils.TokenInfo, error) {
+	return getUserInfoFromToken(ctx)
 }
 
 // GenUserNoPrefix 生成用户编号的前5位
@@ -43,7 +48,8 @@ func getUserInfoFromToken(ctx context.Context) (*utils.TokenInfo, error) {
 	// 获取metadata中的"authorization"键对应的值，假设token在这个键下
 	tokens := md[constants.Token]
 	if len(tokens) == 0 || tokens[0] == "" {
-		return nil, status.Errorf(codes.PermissionDenied, "missing authorization token")
+		//return nil, status.Errorf(codes.PermissionDenied, "missing authorization token")
+		return nil, trerror.TR_NOT_LOGIN
 	}
 
 	// 使用token进行后续处理，例如验证等

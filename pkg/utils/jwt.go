@@ -11,6 +11,7 @@ import (
 const userTokenKey = "trlink.com"
 
 type TokenInfo struct {
+	Raw               string // The original string of the token
 	Sub               string `json:"sub"`
 	UserId            string `json:"user_id"`
 	CurrentTimeMillis string `json:"currentTimeMillis"`
@@ -86,6 +87,7 @@ func ParseTokenWithoutVerify(tokenString string) (*TokenInfo, error) {
 	if err != nil {
 		return nil, trerror.DefaultTrError(fmt.Sprintf("ParseTokenWithoutVerify token map to struct fail: [%+v]", err))
 	}
+	tokenInfo.Raw = tokenString
 	return &tokenInfo, nil
 }
 
