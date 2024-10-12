@@ -41,6 +41,40 @@ func ToJsonString(v any) (string, error) {
 	return string(b), nil
 }
 
+// ToJsonSortedString Sort the structure into a JSON string in ascending order according to the first letter ASCII code
+func ToJsonSortedString(v any) (string, error) {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return "", err
+	}
+
+	var tempMap map[string]interface{}
+	err = json.Unmarshal(b, &tempMap)
+	if err != nil {
+		return "", err
+	}
+
+	keys := make([]string, 0, len(tempMap))
+	for k := range tempMap {
+		keys = append(keys, k)
+	}
+
+	sort.Strings(keys)
+
+	sortedMap := make(map[string]interface{})
+	for _, k := range keys {
+		sortedMap[k] = tempMap[k]
+	}
+
+	jsonBytes, err := json.Marshal(sortedMap)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return "", err
+	}
+
+	return string(jsonBytes), nil
+}
+
 func StringToJson[T any](s string) (T, error) {
 	var v T
 	if s == "" {
