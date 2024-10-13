@@ -78,7 +78,8 @@ func (c *client) GetLiveWeather(ctx context.Context, adCode int64) (*GetLiveWeat
 }
 
 type SearchScenicByNameOption struct {
-	Name string
+	Name   string
+	pageNo int32
 }
 
 type SearchScenicByNameResponse struct {
@@ -92,5 +93,30 @@ func (c *client) SearchScenicByName(ctx context.Context, opt *SearchScenicByName
 		return &SearchScenicByNameResponse{}, nil
 	}
 
-	return c.searchScenicByName(ctx, opt)
+	var err error
+	searchResponse := &SearchScenicByNameResponse{
+		Pois:  []*Poi{},
+		Total: 0,
+	}
+	opt.pageNo = 1
+	//pageSize := 1
+	for opt.pageNo = 1; opt.pageNo <= 100; opt.pageNo++ {
+		resp, err := c.searchScenicByName(ctx, opt)
+		if err != nil {
+			trlogger.Errorf(ctx, "SearchScenicByName searchScenicByName err: [%+v]", err)
+			break
+		}
+		if resp.Total <= 0 {
+			break
+		}
+
+		searchResponse.Pois = append(searchResponse.Pois, resp.Pois...)
+		searchResponse.Total += resp.Total
+	}
+
+	if searchResponse.Total <= 0 && err != nil {
+		return nil, err
+	}
+
+	return searchResponse, nil
 }
