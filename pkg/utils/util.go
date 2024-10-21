@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"math/rand"
 	"regexp"
 	"strings"
 	"time"
@@ -54,4 +55,12 @@ func VerifyIPFormat(ip string) bool {
 func GetDateAndSec() string {
 	strDate := time.Unix(time.Now().Unix(), 0).Format("20060102150405")
 	return strDate
+}
+
+// GenerateRandomBool Generate boolean type values with a specified probability param prob,such as 0.5
+func GenerateRandomBool(prob float64) bool {
+	source := rand.NewSource(time.Now().UnixNano())
+	r := rand.New(source)
+	randomNumber := r.Float64()
+	return randomNumber >= prob
 }
