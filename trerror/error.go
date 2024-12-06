@@ -1,6 +1,7 @@
 package trerror
 
 import (
+	"errors"
 	"fmt"
 	"github.com/woaijssss/tros/trerror/codes"
 	grpcCodes "google.golang.org/grpc/codes"
@@ -50,6 +51,15 @@ var (
 type TrError struct {
 	Code    int32
 	Message string
+}
+
+// WithOutNotFound Support skipping 'no record found' for list classes and setting the judgment operation for empty lists
+func WithOutNotFound(err error) error {
+	if errors.Is(err, DBNotFoundError) {
+		return nil
+	}
+
+	return err
 }
 
 /*
