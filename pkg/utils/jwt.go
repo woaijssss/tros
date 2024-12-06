@@ -22,8 +22,6 @@ type TokenInfo struct {
 
 func CreateToken(userNo string) string {
 	now := time.Now().Unix()
-	currentTimeMillis := now * 1000
-	secretKey := fmt.Sprintf("%s%s%d", userNo, userTokenKey, currentTimeMillis)
 	m := make(map[string]interface{}, 0)
 	m["sub"] = userTokenKey
 	m["user_id"] = userNo
@@ -40,7 +38,7 @@ func CreateToken(userNo string) string {
 	}
 
 	token.Claims = claims
-	tokenString, _ := token.SignedString([]byte(secretKey))
+	tokenString, _ := token.SignedString([]byte(userTokenKey))
 	return tokenString
 }
 
@@ -49,7 +47,6 @@ func ParseToken(tokenString string) (*TokenInfo, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("ParseToken Unexpected signing method: %v", token.Header["alg"])
 		}
-		//key := fmt.Sprintf("%s%s%d", userNo, userTokenKey, currentTimeMillis)
 		return []byte(userTokenKey), nil
 	})
 
@@ -71,11 +68,6 @@ func ParseToken(tokenString string) (*TokenInfo, error) {
 func ParseTokenWithoutVerify(tokenString string) (*TokenInfo, error) {
 	// golang和java服务通用的userId key
 	token, _ := jwt.Parse(tokenString, nil)
-	//if err != nil {
-	//	if _, ok := err.(*jwt.ValidationError); !ok {
-	//		return nil, trerror.DefaultTrError(fmt.Sprintf("Error parsing token: [%+v]", err))
-	//	}
-	//}
 	if token == nil {
 		return nil, trerror.DefaultTrError(fmt.Sprintf("Error parsing token"))
 	}
@@ -88,6 +80,51 @@ func ParseTokenWithoutVerify(tokenString string) (*TokenInfo, error) {
 		return nil, trerror.DefaultTrError(fmt.Sprintf("ParseTokenWithoutVerify token map to struct fail: [%+v]", err))
 	}
 	tokenInfo.Raw = tokenString
+	return &tokenInfo, nil
+}
+
+func CreateTokenWithKey(userNo, tokenKey string) string {
+	now := time.Now().Unix()
+	secretKey := tokenKey
+	m := make(map[string]interface{}, 0)
+	m["sub"] = tokenKey
+	m["user_id"] = userNo
+	m["currentTimeMillis"] = fmt.Sprintf("%d", now*1000)
+	m["exp"] = now + 850000000
+	m["iat"] = now
+	m["jti"] = userNo
+
+	token := jwt.New(jwt.SigningMethodHS512)
+	claims := make(jwt.MapClaims)
+
+	for index, val := range m {
+		claims[index] = val
+	}
+
+	token.Claims = claims
+	tokenString, _ := token.SignedString([]byte(secretKey))
+	return tokenString
+}
+
+func ParseTokenWithKey(tokenString, tokenKey string) (*TokenInfo, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("ParseTokenWithKey Unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(tokenKey), nil
+	})
+
+	if token == nil || token.Valid == false || token.Claims == nil {
+		return nil, trerror.DefaultTrError("ParseTokenWithKey token is invalid")
+	}
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return nil, trerror.DefaultTrError(fmt.Sprintf("ParseTokenWithKey convert MapClaims fail: [%+v]", token.Claims))
+	}
+	tokenInfo, err := MapToJson[TokenInfo](claims)
+	if err != nil {
+		return nil, trerror.DefaultTrError(fmt.Sprintf("ParseTokenWithKey token map to struct fail: [%+v]", err))
+	}
 	return &tokenInfo, nil
 }
 

@@ -12,6 +12,14 @@ import (
 	"google.golang.org/grpc/status"
 	"math/rand"
 	"strconv"
+	"strings"
+	"time"
+)
+
+const (
+	userNoChar              = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+	userNoPureLowercaseChar = "abcdefghijklmnopqrstuvwxyz0123456789"
+	phoneLengthChn          = 11 // Chinese phone number length
 )
 
 // CheckPermission 需要校验token并从中提取user_id的接口，都需要调用该函数
@@ -29,15 +37,51 @@ func GetTokenFromContext(ctx context.Context) (*utils.TokenInfo, error) {
 
 // GenUserNoPrefix 生成用户编号的前5位
 func GenUserNoPrefix() string {
-	characters := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 	length := 5
 	//rand.Seed(time.Now().UnixNano())
 	result := make([]byte, length)
 	for i := 0; i < length; i++ {
-		result[i] = characters[rand.Intn(len(characters))]
+		result[i] = userNoChar[rand.Intn(len(userNoChar))]
 	}
 	return string(result)
 }
+
+// GenerateUniqueIdPureLowercase Generate custom length pure lowercase user No.
+func GenerateUniqueIdPureLowercase(length int) string {
+	rand.Seed(time.Now().UnixNano())
+	// 用于存储生成的用户编号
+	var uniqueID strings.Builder
+	// 循环生成12位字符
+	for i := 0; i < length; i++ {
+		// 随机选择字符集合中的一个字符
+		randomIndex := rand.Intn(len(userNoPureLowercaseChar))
+		uniqueID.WriteRune(rune(userNoPureLowercaseChar[randomIndex]))
+	}
+	return uniqueID.String()
+}
+
+// GenerateUniqueId Generate custom length user No.
+func GenerateUniqueId(length int) string {
+	rand.Seed(time.Now().UnixNano())
+	// 用于存储生成的用户编号
+	var uniqueID strings.Builder
+	// 循环生成12位字符
+	for i := 0; i < length; i++ {
+		// 随机选择字符集合中的一个字符
+		randomIndex := rand.Intn(len(userNoChar))
+		uniqueID.WriteRune(rune(userNoChar[randomIndex]))
+	}
+	return uniqueID.String()
+}
+
+// HidePhoneNumber Keep the last 4 digits of phone number
+func HidePhoneNumber(phone string) string {
+	if len(phone) == phoneLengthChn {
+		return phone[:3] + "****" + phone[7:]
+	}
+	return phone
+}
+
 func getUserInfoFromToken(ctx context.Context) (*utils.TokenInfo, error) {
 	// 从context中获取metadata
 	md, ok := metadata.FromIncomingContext(ctx)
