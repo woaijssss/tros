@@ -21,6 +21,7 @@ const (
 	UserId     = "user_id"
 	ShareToken = "s-token"
 	RemoteIp   = "remote-ip"
+	RequestUrl = "request-url"
 	CompanyId  = "company-id"
 	Product    = "product"
 )

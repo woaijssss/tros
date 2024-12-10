@@ -88,6 +88,15 @@ func GetTraceIdFromContext(ctx context.Context) string {
 	return traceId
 }
 
+func GetRequestUrlFromCtx(ctx context.Context) string {
+	url, ok := ctx.Value(constants.RequestUrl).(string)
+	if !ok {
+		return ""
+	}
+
+	return url
+}
+
 func GetUserIdFromContext(ctx context.Context) string {
 	if c, ok := ctx.(*gin.Context); ok {
 		return c.GetString(constants.UserId)
@@ -125,6 +134,44 @@ func InsertRemoteIp(ctx context.Context) context.Context {
 	if c, ok := ctx.(*gin.Context); ok {
 		c.Set(constants.RemoteIp, c.RemoteIP())
 	}
+	return ctx
+}
+
+func InsertAllInfo(ctx context.Context) context.Context {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if ok {
+		ctx = setRemoteIp(ctx, md)
+		ctx = setRequestUrl(ctx, md)
+	}
+	return ctx
+}
+
+func setRemoteIp(ctx context.Context, md metadata.MD) context.Context {
+	if ipHeaders, ok := md["x-forwarded-for"]; ok && len(ipHeaders) > 0 {
+		/*
+			The IP passed in by grpc gateway may still have "127.0.0.1" or other IPs after the real IP, so a replacement is needed
+		*/
+		ips := strings.Split(ipHeaders[0], ",")
+		ip := ""
+		if len(ips) >= 1 {
+			ip = ips[0]
+		}
+		fmt.Println("Remote IP:", ip)
+		return context.WithValue(ctx, constants.RemoteIp, ip)
+	}
+
+	return ctx
+}
+
+func setRequestUrl(ctx context.Context, md metadata.MD) context.Context {
+	if urlList, ok := md["pattern"]; ok && len(urlList) > 0 {
+		urls := strings.Split(urlList[0], ",")
+		if len(urls) >= 1 {
+			// 请求地址只能有一个
+			return context.WithValue(ctx, constants.RequestUrl, urls[0])
+		}
+	}
+
 	return ctx
 }
 
