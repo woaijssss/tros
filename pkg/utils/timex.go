@@ -163,3 +163,14 @@ func GetMaxDateTime() string {
 	// 将time.Time类型转换为指定格式的string类型
 	return startOfDay.Format(time.DateTime)
 }
+
+// GetDayCount get the specified date as the day of the current year
+func GetDayCount(t time.Time) int {
+	return t.YearDay()
+}
+
+// GetWeekCount get the specified week of the current year for the specified time
+func GetWeekCount(t time.Time) int {
+	_, week := t.ISOWeek()
+	return week
+}
