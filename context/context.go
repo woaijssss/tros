@@ -9,10 +9,11 @@ import (
 	"github.com/woaijssss/tros/pkg/utils/encrypt"
 	"google.golang.org/grpc/metadata"
 	"strings"
+	"time"
 )
 
 type TrContext struct {
-	context.Context
+	//context.Context
 	TraceId    string         `json:"traceId,omitempty"`
 	UserId     int64          `json:"userId,omitempty"`
 	OpId       int64          `json:"opId,omitempty"`
@@ -32,6 +33,11 @@ type TrContext struct {
 	Extra      map[string]any `json:"extra,omitempty"`
 }
 
+func (tc *TrContext) Deadline() (time.Time, bool)       { return time.Time{}, false }
+func (tc *TrContext) Done() <-chan struct{}             { return nil }
+func (tc *TrContext) Err() error                        { return nil }
+func (tc *TrContext) Value(key interface{}) interface{} { return tc.Value(key) }
+
 const (
 	headerRealIP    = "X-Real-Ip"
 	headerUserAgent = "User-Agent"
@@ -39,24 +45,33 @@ const (
 	metadataTrace   = "Tr-Trace"
 )
 
-func (ctx *TrContext) SetExtraKeyValue(key string, val any) {
-	if ctx.Extra == nil {
-		ctx.Extra = map[string]any{key: val}
+func (tc *TrContext) SetExtraKeyValue(key string, val any) {
+	if tc.Extra == nil {
+		tc.Extra = map[string]any{key: val}
 	} else {
-		ctx.Extra[key] = val
+		tc.Extra[key] = val
 	}
 }
 
-func (ctx *TrContext) GetExtraValue(key string) any {
-	if ctx.Extra == nil {
+func (tc *TrContext) GetExtraValue(key string) any {
+	if tc.Extra == nil {
 		return nil
 	} else {
-		return ctx.Extra[key]
+		return tc.Extra[key]
 	}
 }
 
 func GenTraceID() string {
 	return encrypt.EncodeMD5AsEmpty()
+}
+
+func GetIpFromCtx(ctx context.Context) string {
+	ip, ok := ctx.Value(constants.RemoteIp).(string)
+	if !ok {
+		return ""
+	}
+
+	return ip
 }
 
 func GetContextWithTraceId() context.Context {
