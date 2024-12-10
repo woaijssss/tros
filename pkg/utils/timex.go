@@ -72,6 +72,10 @@ func GetDateDetailString() string {
 	return date
 }
 
+func Date2Time(stringTime string) (time.Time, error) {
+	return time.ParseInLocation(time.DateOnly, stringTime, time.Local)
+}
+
 func GetHourByString(stringTime string) (error, time.Time) {
 	stamp, err := time.ParseInLocation("2006010215", stringTime, time.Local)
 	return err, stamp
