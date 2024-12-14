@@ -21,3 +21,7 @@ package utils
 //	}
 //	return kv
 //}
+
+const (
+	uuidCommonChar = "0123456789"
+)

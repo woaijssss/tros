@@ -64,3 +64,32 @@ func GenerateRandomBool(prob float64) bool {
 	randomNumber := r.Float64()
 	return randomNumber >= prob
 }
+
+// GenerateCommonUniqueIdOnlyNumber General method to generate a unique ID (numeric only) based on length.
+func GenerateCommonUniqueIdOnlyNumber(length int) string {
+	rand.Seed(time.Now().UnixNano())
+	// 用于存储生成的用户编号
+	var uniqueID strings.Builder
+	// 循环生成12位字符
+	for i := 0; i < length; i++ {
+		// 随机选择字符集合中的一个字符
+		randomIndex := rand.Intn(len(uuidCommonChar))
+		uniqueID.WriteRune(rune(uuidCommonChar[randomIndex]))
+	}
+	return uniqueID.String()
+}
+
+// GenerateCommonUniqueIdOnlyNumberReturnInteger General method to generate a unique ID (numeric only) based on length.
+func GenerateCommonUniqueIdOnlyNumberReturnInteger(length int) int64 {
+	rand.Seed(time.Now().UnixNano())
+	// 用于存储生成的用户编号
+	var uniqueID strings.Builder
+	// 循环生成12位字符
+	for i := 0; i < length; i++ {
+		// 随机选择字符集合中的一个字符
+		randomIndex := rand.Intn(len(uuidCommonChar))
+		uniqueID.WriteRune(rune(uuidCommonChar[randomIndex]))
+	}
+
+	return String2Int64(uniqueID.String())
+}

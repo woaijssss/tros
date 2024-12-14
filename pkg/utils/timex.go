@@ -152,7 +152,12 @@ func CalcAgeWithoutErr(birthdayStr string) int32 {
 	return age
 }
 
-// GetMinDateTime Retrieve the minimum date formats for the current time's day
+// GetCurrentDateTime Get the 'yyyy-MM-DD HH:MM:SS' format of the current time.
+func GetCurrentDateTime() string {
+	return time.Now().Format(time.DateTime)
+}
+
+// GetMinDateTime Get the minimum date formats for the current time's day
 func GetMinDateTime() string {
 	now := time.Now()
 	startOfDay := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
