@@ -99,15 +99,17 @@ func (app *App) Init() error {
 	}
 
 	atx := newAppContext(router, registrar)
+
+	// db init
+	mysqlx.InitMysqlX(app.ctx)
+	redisx.Setup(app.ctx)
+
 	for _, initializer := range app.initializers {
 		err := initializer.Init(atx)
 		if err != nil {
 			return err
 		}
 	}
-
-	mysqlx.InitMysqlX(app.ctx)
-	redisx.Setup(app.ctx)
 
 	return nil
 }
