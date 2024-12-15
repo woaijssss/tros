@@ -2,9 +2,12 @@ package utils
 
 import (
 	"bytes"
+	"crypto/md5"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"math/big"
 	"math/rand"
 	"regexp"
 	"strings"
@@ -92,4 +95,37 @@ func GenerateCommonUniqueIdOnlyNumberReturnInteger(length int) int64 {
 	}
 
 	return String2Int64(uniqueID.String())
+}
+
+// GenerateUniqueIdByUniqueStr Generate an uuid of type int64 based on the specified unique string.
+func GenerateUniqueIdByUniqueStr(s string) (int64, error) {
+	// Calculate the MD5 hash value of a string
+	hash := md5.Sum([]byte(s))
+	hashBytes := hash[:]
+
+	// Convert byte slices to hexadecimal strings
+	hexStr := fmt.Sprintf("%x", hashBytes)
+
+	// Convert hexadecimal string to integer in base 25 format
+	num, ok := new(big.Int).SetString(hexStr, 16)
+	if !ok {
+		return -1, errors.New("Unable to convert hexadecimal string to integer")
+	}
+	base25Num := new(big.Int).Set(num)
+	base := big.NewInt(25)
+	zero := big.NewInt(0)
+	result := big.NewInt(0)
+	for base25Num.Cmp(zero) > 0 {
+		remainder := new(big.Int).Mod(base25Num, base)
+		result.Mul(result, base).Add(result, remainder)
+		base25Num.Div(base25Num, base)
+	}
+
+	// Take a mold for 2 * * 25-1
+	mod := big.NewInt(1 << 25)
+	mod.Sub(mod, big.NewInt(1))
+	finalResult := new(big.Int).Mod(result, mod)
+
+	// Convert the final result to int64 type and return it
+	return finalResult.Int64(), nil
 }
