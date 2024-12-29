@@ -14,10 +14,10 @@ import (
 var Client = new(client)
 
 const (
-	UgcCheckSceneInfo      = 1
-	UgcCheckSceneComment   = 2
-	UgcCheckSceneForum     = 3
-	UgcCheckSceneCommunity = 4
+	UgcCheckSceneInfo      = 1 // 资料
+	UgcCheckSceneComment   = 2 // 评论
+	UgcCheckSceneForum     = 3 // 论坛
+	UgcCheckSceneCommunity = 4 // 社交日志
 )
 
 func (c *client) Init(atx tros.AppContext) error {
@@ -78,9 +78,6 @@ func (c *client) MessageCheck(ctx context.Context, accessToken string, opt *Mess
 		return true, nil
 	}
 	opt.Version = 2
-	//return c.messageCheck(ctx, accessToken, opt)
-	//for i := int32(1); i < 5; i++ {
-	//opt.Scene = i
 	ok, err := c.messageCheck(ctx, accessToken, opt)
 
 	if err != nil {

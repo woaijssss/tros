@@ -33,6 +33,11 @@ func Time2Date(timeStr time.Time) string {
 	return timeStr.Format(time.DateOnly)
 }
 
+// Time2FullDateTime 2006-01-02 15:04:05
+func Time2FullDateTime(timeStr time.Time) string {
+	return timeStr.Format(time.DateTime)
+}
+
 func Time2DateMonthOnly(timeStr time.Time) string {
 	return timeStr.Format(noYear)
 }
