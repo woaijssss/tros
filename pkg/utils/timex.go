@@ -53,7 +53,7 @@ func GetDayTime() int64 {
 }
 
 func GetDate() string {
-	strDate := time.Unix(time.Now().Unix(), 0).Format("20060102")
+	strDate := time.Unix(time.Now().Unix(), 0).Format(time.DateOnly)
 	return strDate
 }
 
@@ -121,8 +121,8 @@ func TimeCompare(timeBefore, timeAfter string) bool {
 	//time1 := "2015-03-20 08:50:29"
 	//time2 := "2015-03-21 09:04:25"
 	//先把时间字符串格式化成相同的时间类型
-	t1, err := time.Parse("2006.01.02", timeBefore)
-	t2, err := time.Parse("2006.01.02", timeAfter)
+	t1, err := time.Parse(time.DateOnly, timeBefore)
+	t2, err := time.Parse(time.DateOnly, timeAfter)
 	if err == nil && t1.Before(t2) {
 		return true
 	}
@@ -187,4 +187,19 @@ func GetDayNumber(t time.Time) int {
 func GetWeekNumber(t time.Time) int {
 	_, week := t.ISOWeek()
 	return week
+}
+
+func CalcDaysBetweenDate(s, e string) (int, error) {
+	t1, err := time.Parse(time.DateOnly, s)
+	if err != nil {
+		return 0, err
+	}
+	t2, err := time.Parse(time.DateOnly, e)
+	if err != nil {
+		return 0, err
+	}
+	// Calculate the difference in days between two dates
+	duration := t2.Sub(t1)
+
+	return int(duration.Hours() / 24), nil
 }
