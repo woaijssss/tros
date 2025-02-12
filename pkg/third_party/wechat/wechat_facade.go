@@ -32,6 +32,14 @@ func (c *client) Init(atx tros.AppContext) error {
 	return nil
 }
 
+func (c *client) SetAppId(appId string) {
+	c.appId = appId
+}
+
+func (c *client) SetAppSecret(appSecret string) {
+	c.appSecret = appSecret
+}
+
 type GetWechatAccessTokenResponse struct {
 	AccessToken string
 	ExpiresIn   int64
