@@ -57,6 +57,11 @@ func GetDate() string {
 	return strDate
 }
 
+func GetTomorrowDate() string {
+	tomorrow := time.Now().AddDate(0, 0, 1)
+	return tomorrow.Format(time.DateOnly)
+}
+
 func GetDateOnly() string {
 	return time.Now().Format(time.DateOnly)
 }
