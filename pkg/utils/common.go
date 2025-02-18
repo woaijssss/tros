@@ -24,4 +24,5 @@ package utils
 
 const (
 	uuidCommonChar = "0123456789"
+	uuidFullChar   = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 )
