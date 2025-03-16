@@ -3,6 +3,9 @@ package utils
 import (
 	"bytes"
 	"crypto/md5"
+	"crypto/sha256"
+	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -142,4 +145,22 @@ func GenerateFullGlobalUuid(length int) string {
 		uniqueID.WriteRune(rune(uuidFullChar[randomIndex]))
 	}
 	return uniqueID.String()
+}
+
+// GenerateUniqueIDByHash Generate a unique ID of a specified length based on a specified string
+func GenerateUniqueIDByHash(base string, length int) (string, error) {
+	// Base64 encode
+	base64Encoded := base64.StdEncoding.EncodeToString([]byte(base))
+
+	// SHA-256 hash
+	hash := sha256.Sum256([]byte(base64Encoded))
+
+	// Hexadecimal encoding
+	hexEncoded := hex.EncodeToString(hash[:])
+
+	// Cut the specified length
+	if len(hexEncoded) > length {
+		return hexEncoded[:length], nil
+	}
+	return hexEncoded, nil
 }
