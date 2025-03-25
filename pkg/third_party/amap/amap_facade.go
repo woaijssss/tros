@@ -120,3 +120,30 @@ func (c *client) SearchScenicByName(ctx context.Context, opt *SearchScenicByName
 
 	return searchResponse, nil
 }
+
+// SearchScenicByUuid 根据uuid搜索单个景点
+func (c *client) SearchScenicByUuid(ctx context.Context, uuid string) (*SearchScenicByNameResponse, error) {
+	if len(uuid) <= 0 {
+		return &SearchScenicByNameResponse{}, nil
+	}
+
+	var err error
+	searchResponse := &SearchScenicByNameResponse{
+		Pois:  []*Poi{},
+		Total: 0,
+	}
+	resp, err := c.searchScenicByUuid(ctx, uuid)
+	if err != nil {
+		trlogger.Errorf(ctx, "SearchScenicByName searchScenicByName err: [%+v]", err)
+		return nil, err
+	}
+
+	searchResponse.Pois = append(searchResponse.Pois, resp.Pois...)
+	searchResponse.Total += resp.Total
+
+	if searchResponse.Total <= 0 && err != nil {
+		return nil, err
+	}
+
+	return searchResponse, nil
+}

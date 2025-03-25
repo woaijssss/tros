@@ -16,8 +16,9 @@ type client struct {
 }
 
 const (
-	scenicUrlTemplateV3 = "https://restapi.amap.com/v3/place/text?keywords=%s&city=beijing&offset=1&page=1&key=%s&extensions=all"
-	scenicUrlTemplateV5 = "https://restapi.amap.com/v5/place/text?types=%s&keywords=%s&page_size=10&page_num=%d&key=%s&extensions=all&show_fields=business,photos"
+	scenicUrlTemplateV3       = "https://restapi.amap.com/v3/place/text?keywords=%s&city=beijing&offset=1&page=1&key=%s&extensions=all"
+	scenicUrlTemplateV5       = "https://restapi.amap.com/v5/place/text?types=%s&keywords=%s&page_size=10&page_num=%d&key=%s&extensions=all&show_fields=business,photos"
+	scenicUrlTemplateV5ByUuid = "https://restapi.amap.com/v5/place/detail?id=%s&key=%s&extensions=all&show_fields=business,photos"
 
 	// 逆地理编码接口地址
 	/// 返回基本地址信息
@@ -295,6 +296,35 @@ func (c *client) searchScenicByName(ctx context.Context, opt *SearchScenicByName
 		return result, err
 	}
 	trlogger.Errorf(ctx, "parsePoiResult response: [%+v]", data)
+
+	for _, poi := range data.Pois {
+		result.Pois = append(result.Pois, poi)
+	}
+
+	result.Total = utils.String2Int32(data.Count)
+
+	return result, nil
+}
+
+func (c *client) searchScenicByUuid(ctx context.Context, uuid string) (*SearchScenicByNameResponse, error) {
+	result := &SearchScenicByNameResponse{}
+
+	url := fmt.Sprintf(scenicUrlTemplateV5ByUuid, uuid, conf.Get(constants.AMapAppKey))
+	httpClient := http2.NewHttpClient()
+	httpClient.SetHeader("Content-Type", "application/x-www-form-urlencoded")
+	resp, err := httpClient.Get(ctx, url)
+	if err != nil {
+		trlogger.Errorf(ctx, "searchScenicByUuid err: [%+v]", err)
+		return result, err
+	}
+
+	var data response
+	err = http2.ResToObj(resp, &data)
+	if err != nil {
+		trlogger.Errorf(ctx, "searchScenicByUuid http2.ResToObj err: [%+v]", err)
+		return result, err
+	}
+	trlogger.Errorf(ctx, "searchScenicByUuid response: [%+v]", data)
 
 	for _, poi := range data.Pois {
 		result.Pois = append(result.Pois, poi)
