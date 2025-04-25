@@ -190,6 +190,27 @@ func Set(ctx context.Context, key, val string, expire int64) error {
 	return err
 }
 
+func KeysAll(ctx context.Context, keyPrefix string) ([]string, error) {
+	keyPrefix += "*" // 默认补充一个*
+
+	client := getRedisConn(ctx)
+	defer client.Close()
+
+	var resultKeyList []string
+	// 执行 KEYS 命令，获取匹配模式的键
+	keys, err := redis.Strings(client.Do("KEYS", keyPrefix))
+	if err != nil {
+		trlogger.Fatalf(ctx, "keys all redis string err %+v", err)
+		return []string{}, err
+	}
+
+	// 打印获取到的键
+	for _, key := range keys {
+		resultKeyList = append(resultKeyList, key)
+	}
+	return resultKeyList, nil
+}
+
 func Incr(context context.Context, key string) error {
 	client := getRedisConn(context)
 	defer client.Close()
