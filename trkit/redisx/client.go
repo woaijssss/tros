@@ -5,7 +5,6 @@ import (
 	trlogger "github.com/woaijssss/tros/logx"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	"github.com/gomodule/redigo/redis"
 )
 
@@ -128,7 +127,7 @@ func getRedisConn(ctx context.Context) redis.Conn {
 	return client
 }
 
-func ListAll(context *gin.Context, key string) ([]interface{}, error) {
+func ListAll(context context.Context, key string) ([]interface{}, error) {
 	client := getRedisConn(context)
 
 	defer client.Close()
@@ -191,7 +190,7 @@ func Set(ctx context.Context, key, val string, expire int64) error {
 	return err
 }
 
-func Incr(context *gin.Context, key string) error {
+func Incr(context context.Context, key string) error {
 	client := getRedisConn(context)
 	defer client.Close()
 
@@ -207,7 +206,7 @@ func Incr(context *gin.Context, key string) error {
 	return err
 }
 
-func SetV2(context *gin.Context, key, val string) error {
+func SetV2(context context.Context, key, val string) error {
 	client := getRedisConn(context)
 	defer client.Close()
 
@@ -224,7 +223,7 @@ func SetV2(context *gin.Context, key, val string) error {
 	return err
 }
 
-func Expire(context *gin.Context, key string, expire int64) error {
+func Expire(context context.Context, key string, expire int64) error {
 	client := getRedisConn(context)
 	defer client.Close()
 
@@ -240,7 +239,7 @@ func Expire(context *gin.Context, key string, expire int64) error {
 	return err
 }
 
-func Delete(context *gin.Context, key string) error {
+func Delete(context context.Context, key string) error {
 	client := RedisClient.Get()
 	defer client.Close()
 
@@ -255,7 +254,7 @@ func Delete(context *gin.Context, key string) error {
 	}
 	return err
 }
-func GetBit(context *gin.Context, key string, offset int64) (int64, error) {
+func GetBit(context context.Context, key string, offset int64) (int64, error) {
 	client := getRedisConn(context)
 
 	defer client.Close()
@@ -278,7 +277,7 @@ func GetBit(context *gin.Context, key string, offset int64) (int64, error) {
 	return value, nil
 }
 
-func SetBit(context *gin.Context, key string, val, offset int64) error {
+func SetBit(context context.Context, key string, val, offset int64) error {
 	client := getRedisConn(context)
 	defer client.Close()
 
