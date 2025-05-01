@@ -2,6 +2,7 @@ package utils
 
 import (
 	"bytes"
+	"context"
 	"crypto/md5"
 	"crypto/sha256"
 	"encoding/base64"
@@ -10,6 +11,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/woaijssss/tros/client/http"
+	trlogger "github.com/woaijssss/tros/logx"
 	"math/big"
 	"math/rand"
 	"regexp"
@@ -163,4 +166,23 @@ func GenerateUniqueIDByHash(base string, length int) (string, error) {
 		return hexEncoded[:length], nil
 	}
 	return hexEncoded, nil
+}
+
+func CheckURLIsAccessible(ctx context.Context, url string) bool {
+	// Initiate HEAD request, only retrieve response header information, saving bandwidth and time
+	resp, err := http.NewHttpClient().Head(ctx, url)
+	if err != nil {
+		trlogger.Errorf(ctx, "CheckURLIsAccessible Error checking URL err: [%+v][%s]", err, url)
+		return false
+	}
+	defer resp.Body.Close()
+
+	// Determine whether the link is valid based on the status code
+	if resp.StatusCode < 200 || resp.StatusCode >= 400 {
+		fmt.Println("Bad status code:", resp.Status)
+		trlogger.Errorf(ctx, "CheckURLIsAccessible Bad status code: [%d][%s]", resp.Status, url)
+		return false
+	}
+
+	return true
 }

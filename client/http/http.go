@@ -33,6 +33,10 @@ func (c *Client) Get(ctx context.Context, url string) (*Response, error) {
 	return c.send(ctx, http.MethodGet, url, nil)
 }
 
+func (c *Client) Head(ctx context.Context, url string) (*Response, error) {
+	return c.send(ctx, http.MethodHead, url, nil)
+}
+
 func (c *Client) GetWithReader(ctx context.Context, url string) ([]byte, error) {
 	resp, err := c.send(ctx, http.MethodGet, url, nil)
 	if err != nil {

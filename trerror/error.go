@@ -32,9 +32,10 @@ var (
 	TR_RECORD_NOT_FOUND      = &TrError{codes.TrRecordNotFound, "记录不存在"}
 	TR_LOGIN_UNSUPPORT       = &TrError{codes.TrLoginUnSupport, "暂不支持此方式登录"}
 
-	TR_SYSTEM_ERROR = &TrError{codes.TrSystemError, "系统错误"}
-	TR_SYSTEM_BUSY  = &TrError{codes.TrSystemBusy, "系统繁忙"}
-	TR_TIMEOUT      = &TrError{codes.TrTimeout, "请求超时"}
+	TR_SYSTEM_ERROR          = &TrError{codes.TrSystemError, "系统错误"}
+	TR_SYSTEM_BUSY           = &TrError{codes.TrSystemBusy, "系统繁忙"}
+	TR_TIMEOUT               = &TrError{codes.TrTimeout, "请求超时"}
+	TR_URL_CANNOT_ACCESS_ERR = &TrError{codes.TrUrlCannotAccess, "链接无法访问"}
 
 	// ugc校验错误
 	ContentIllegal = &TrError{codes.TrContentIllegal, "文字包含违规信息"}

@@ -31,6 +31,8 @@ const (
 	TrSystemBusy  = 5002
 	TrTimeout     = 5003
 
+	TrUrlCannotAccess = 5100
+
 	TrContentIllegal = 10201
 	TrImageIllegal   = 10202
 	TrVideoIllegal   = 10203
