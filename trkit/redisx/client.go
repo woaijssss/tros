@@ -65,6 +65,10 @@ func initRedis(ctx context.Context) {
 	// 从配置文件获取redis的ip以及db
 	RedisHost = conf.RedisHost
 	RedisDB = RedisDB
+
+	if len(RedisHost) > 0 {
+		checkClient(&conf)
+	}
 	// 建立连接池
 	RedisClient = &redis.Pool{
 		// 从配置文件获取maxidle以及maxactive，取不到则用后面的默认值
@@ -114,6 +118,20 @@ func initRedisByHost(host, password string) {
 			return c, nil
 		},
 	}
+}
+
+func checkClient(conf *RedisConfig) {
+	c, err := redis.Dial("tcp", RedisHost)
+	if err != nil {
+		panic(err)
+	}
+	defer c.Close()
+	if _, err := c.Do("AUTH", conf.RedisPassword); err != nil {
+		panic(err)
+	}
+	// 选择db
+	c.Do("SELECT", RedisDB)
+	return
 }
 
 func getRedisConn(ctx context.Context) redis.Conn {
