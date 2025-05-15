@@ -40,6 +40,8 @@ const (
 
 	AMapAppKey = "amap.appKey" // 高德地图的appkey
 
-	FeiShuWebHookUrlKey = "feishu.web_hook_url" // 飞书机器人webhook地址
-	FeiShuSignKey       = "feishu.sign_key"     // 飞书通知签名key
+	FeiShuWebHookUrlKeyForTest = "feishu.test.web_hook_url" // 飞书机器人webhook地址-测试环境
+	FeiShuSignKeyForTest       = "feishu.test.sign_key"     // 飞书通知签名key-测试环境
+	FeiShuWebHookUrlKeyForProd = "feishu.prod.web_hook_url" // 飞书机器人webhook地址-线上环境
+	FeiShuSignKeyForProd       = "feishu.prod.sign_key"     // 飞书通知签名key-线上环境
 )
