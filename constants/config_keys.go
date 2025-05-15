@@ -39,4 +39,7 @@ const (
 	AliOssBucketUrlPrefix = "oss.bucketUrlPrefix" // 阿里oss存储桶内容的访问前缀
 
 	AMapAppKey = "amap.appKey" // 高德地图的appkey
+
+	FeiShuWebHookUrlKey = "feishu.web_hook_url" // 飞书机器人webhook地址
+	FeiShuSignKey       = "feishu.sign_key"     // 飞书通知签名key
 )

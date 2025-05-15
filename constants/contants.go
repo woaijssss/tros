@@ -35,3 +35,5 @@ const (
 	Prod          SystemEnv = 1
 	Test          SystemEnv = 2
 )
+
+const MaxApiExecuteTimeMs = 2000 // 接口请求默认最大时间

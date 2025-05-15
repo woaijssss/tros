@@ -19,8 +19,8 @@ const (
 	defaultKeyValuesCap = 8
 )
 
-// UnaryServerInterceptor returns a new unary server interceptors that performs logging
-func UnaryServerInterceptor(config GRpcConfig) grpc.UnaryServerInterceptor {
+// UnaryServerInterceptorLogging returns a new unary server interceptors that performs logging
+func UnaryServerInterceptorLogging(config GRpcConfig) grpc.UnaryServerInterceptor {
 	gl := newGpcLogger(config)
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 		method := info.FullMethod

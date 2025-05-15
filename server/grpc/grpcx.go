@@ -6,8 +6,7 @@ import (
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	"github.com/woaijssss/tros/conf"
 	trlogger "github.com/woaijssss/tros/logx"
-	grpc3 "github.com/woaijssss/tros/server/middleware/grpc"
-	"github.com/woaijssss/tros/server/middleware/http"
+	grpc2 "github.com/woaijssss/tros/server/middleware/grpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
@@ -20,9 +19,9 @@ import (
 func DefaultServer(opts ...ServerOption) *Server {
 	var options []ServerOption
 
-	lc := grpc3.GRpcConfig{
-		ExcludeGRpcGatewayRequest: true,
-	}
+	//lc := grpc3.GRpcConfig{
+	//	ExcludeGRpcGatewayRequest: true,
+	//}
 	ro := []grpc_recovery.Option{
 		grpc_recovery.WithRecoveryHandlerContext(recoveryHandler),
 	}
@@ -32,10 +31,10 @@ func DefaultServer(opts ...ServerOption) *Server {
 		UnaryInterceptor(
 			grpc_recovery.UnaryServerInterceptor(ro...),
 			//openTelemeTryMiddleware.UnaryServerInterceptorrceptor(),
-			grpc3.UnaryServerInterceptor(lc),
+			//grpc3.UnaryServerInterceptorLogging(lc),	// todo 这里先去掉，目前不影响接口访问
 			//grpc_recovery.UnaryServerInterceptor(ro...),
 			//identity.UnaryServerInterceptor(),
-			http.UnaryServerInterceptor(),
+			grpc2.UnaryServerInterceptor(),
 		),
 		StreamInterceptor(
 			grpc_recovery.StreamServerInterceptor(ro...),
