@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"github.com/woaijssss/tros/trerror"
@@ -29,7 +30,14 @@ func SaveJson(marshal []byte, jsonFile string) (err error) {
 }
 
 func ToJsonByte(v any) ([]byte, error) {
-	return json.Marshal(v)
+	//return json.Marshal(v)
+	// 参考 https://cloud.tencent.com/developer/article/2418213
+	// 单独设置 Json 选项避免转义（&符号）
+	var bb bytes.Buffer
+	en := json.NewEncoder(&bb)
+	en.SetEscapeHTML(false)
+	err := en.Encode(v)
+	return bb.Bytes(), err
 }
 
 func ToJsonString(v any) (string, error) {
