@@ -16,8 +16,9 @@ type client struct {
 }
 
 const (
-	scenicUrlTemplateV3       = "https://restapi.amap.com/v3/place/text?keywords=%s&city=beijing&offset=1&page=1&key=%s&extensions=all"
-	scenicUrlTemplateV5       = "https://restapi.amap.com/v5/place/text?types=%s&keywords=%s&page_size=10&page_num=%d&key=%s&extensions=all&show_fields=business,photos"
+	scenicUrlTemplateV3 = "https://restapi.amap.com/v3/place/text?keywords=%s&city=beijing&offset=1&page=1&key=%s&extensions=all"
+	//scenicUrlTemplateV5       = "https://restapi.amap.com/v5/place/text?types=%s&keywords=%s&page_size=10&page_num=%d&key=%s&extensions=all&show_fields=business,photos"
+	scenicUrlTemplateV5       = "https://restapi.amap.com/v5/place/text?keywords=%s&page_size=10&page_num=%d&key=%s&extensions=all&show_fields=business,photos"
 	scenicUrlTemplateV5ByUuid = "https://restapi.amap.com/v5/place/detail?id=%s&key=%s&extensions=all&show_fields=business,photos"
 
 	// 逆地理编码接口地址
@@ -280,7 +281,8 @@ func (c *client) getLiveWeather(ctx context.Context, adCode int64) (*weatherLive
 func (c *client) searchScenicByName(ctx context.Context, opt *SearchScenicByNameOption) (*SearchScenicByNameResponse, error) {
 	result := &SearchScenicByNameResponse{}
 
-	url := fmt.Sprintf(scenicUrlTemplateV5, aMapTypeCodesScenicSpot, opt.Name, opt.pageNo, conf.Get(constants.AMapAppKey))
+	//url := fmt.Sprintf(scenicUrlTemplateV5, aMapTypeCodesScenicSpot, opt.Name, opt.pageNo, conf.Get(constants.AMapAppKey))
+	url := fmt.Sprintf(scenicUrlTemplateV5, opt.Name, opt.pageNo, conf.Get(constants.AMapAppKey))
 	httpClient := http2.NewHttpClient()
 	httpClient.SetHeader("Content-Type", "application/x-www-form-urlencoded")
 	resp, err := httpClient.Get(ctx, url)
