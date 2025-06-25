@@ -44,4 +44,6 @@ const (
 	FeiShuSignKeyForTest       = "feishu.test.sign_key"     // 飞书通知签名key-测试环境
 	FeiShuWebHookUrlKeyForProd = "feishu.prod.web_hook_url" // 飞书机器人webhook地址-线上环境
 	FeiShuSignKeyForProd       = "feishu.prod.sign_key"     // 飞书通知签名key-线上环境
+
+	IgnoreAlarmUris = "ignore_alarm_uris" // 不需要执行飞书报警通知的uri地址
 )

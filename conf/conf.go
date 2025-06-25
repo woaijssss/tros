@@ -230,6 +230,9 @@ func Get(key string) interface{} { return c.Get(key) }
 // GetString returns the value associated with the key as a string
 func GetString(key string) string { return c.GetString(key) }
 
+// GetStringSlice returns the value associated with the key as a string slice
+func GetStringSlice(key string) []string { return c.GetStringSlice(key) }
+
 // GetBool returns the value associated with the key as a boolean
 func GetBool(key string) bool { return c.GetBool(key) }
 

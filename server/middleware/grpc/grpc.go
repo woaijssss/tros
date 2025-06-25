@@ -3,6 +3,8 @@ package grpc
 import (
 	"context"
 	"errors"
+	"fmt"
+	"github.com/woaijssss/tros/conf"
 	"github.com/woaijssss/tros/constants"
 	context2 "github.com/woaijssss/tros/context"
 	trlogger "github.com/woaijssss/tros/logx"
@@ -24,11 +26,22 @@ func UnaryServerInterceptor() grpc.UnaryServerInterceptor {
 		resp, err = handler(ctx, req)
 		t2 := time.Now()
 
+		go asyncSendFeiShuAlarm(ctx, t1, t2, err)
+
+		return
+	}
+}
+
+func asyncSendFeiShuAlarm(ctx context.Context, t1, t2 time.Time, err error) {
+	uri := context2.GetRequestUrlFromCtx(ctx)
+	fmt.Println(uri)
+
+	ignoreAlarmUris := conf.GetStringSlice(constants.IgnoreAlarmUris)
+
+	if !utils.In(uri, ignoreAlarmUris) { // 只有不在忽略列表里的 接口报错，才需要推送
 		// 异步推送消息
 		go apiExecuteTimeAlarmNotify(ctx, t1, t2)
 		go apiCommonAlarmNotify(ctx, err)
-
-		return
 	}
 }
 
