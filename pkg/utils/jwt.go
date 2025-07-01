@@ -9,6 +9,11 @@ import (
 )
 
 const userTokenKey = "trlink.com"
+const userTokenExpSecond = 850000000
+
+func GetUserTokenExpSecond() int64 {
+	return userTokenExpSecond
+}
 
 type TokenInfo struct {
 	Raw               string // The original string of the token
@@ -26,7 +31,7 @@ func CreateToken(userNo string) string {
 	m["sub"] = userTokenKey
 	m["user_id"] = userNo
 	m["currentTimeMillis"] = fmt.Sprintf("%d", now*1000)
-	m["exp"] = now + 850000000
+	m["exp"] = now + userTokenExpSecond
 	m["iat"] = now
 	m["jti"] = userNo
 
@@ -90,7 +95,7 @@ func CreateTokenWithKey(userNo, tokenKey string) string {
 	m["sub"] = tokenKey
 	m["user_id"] = userNo
 	m["currentTimeMillis"] = fmt.Sprintf("%d", now*1000)
-	m["exp"] = now + 850000000
+	m["exp"] = now + userTokenExpSecond
 	m["iat"] = now
 	m["jti"] = userNo
 
