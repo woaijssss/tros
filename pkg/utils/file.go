@@ -308,9 +308,21 @@ func GetFileName(fileFullPath string) string {
 	return fileNameList[0]
 }
 
+func GetFileBaseName(fileFullPath string) string {
+	return filepath.Base(fileFullPath)
+}
+
 func GetFileModifyTime(fileFullPath string) int64 {
 	fileInfo, _ := os.Stat(fileFullPath)
 	return fileInfo.ModTime().Unix()
+}
+
+func GetCommonFileSize(fileFullPath string) (int64, error) {
+	fileInfo, err := os.Stat(fileFullPath)
+	if err != nil {
+		return 0, err
+	}
+	return fileInfo.Size(), nil
 }
 
 func DeleteFile(filepath string) error {
