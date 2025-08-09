@@ -34,6 +34,22 @@ func (cmp Cmp[T]) Sort(data []T) {
 	sort.Sort(ps)
 }
 
+// SortMapToSlice Sort is a method on the function type, Cmp, that sorts the argument slice according to the function and output the result slice.
+func SortMapToSlice(dataMap map[int32]int32) []int32 {
+	// 1. 将 map 的 key 放入 slice
+	var resultSlice []int32
+	for k := range dataMap {
+		resultSlice = append(resultSlice, k)
+	}
+
+	// 2. 按 value 从大到小排序 keys
+	sort.Slice(resultSlice, func(i, j int) bool {
+		return dataMap[resultSlice[i]] > dataMap[resultSlice[j]] // 从大到小
+	})
+
+	return resultSlice
+}
+
 type sortHolder[T any] struct {
 	data []T
 	cmp  func(p1, p2 *T) bool // Closure used in the Less method.
