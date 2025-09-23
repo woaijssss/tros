@@ -17,6 +17,7 @@ const (
 var (
 	TR_SUCCESS               = &TrError{codes.TrSuccess, "成功"}
 	TR_BAD_REQUEST           = &TrError{codes.TrBadRequest, "无效的请求"}
+	TR_NOT_FOUND             = &TrError{codes.TrNotFound, "未找到数据"}
 	TR_ERROR                 = &TrError{codes.TrError, "服务器错误"}
 	TR_INVALID_ERROR         = &TrError{codes.TrInvalidError, "未知的错误类型"}
 	TR_INVALID_TOKEN         = &TrError{codes.TrInvalidToken, "无效token"}

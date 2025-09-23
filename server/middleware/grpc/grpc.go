@@ -38,6 +38,11 @@ func asyncSendFeiShuAlarm(ctx context.Context, t1, t2 time.Time, err error) {
 
 	ignoreAlarmUris := conf.GetStringSlice(constants.IgnoreAlarmUris)
 
+	// todo 这里增加要忽略的报警
+	if errors.Is(err, trerror.TR_NOT_FOUND) {
+		return
+	}
+
 	if !utils.In(uri, ignoreAlarmUris) { // 只有不在忽略列表里的 接口报错，才需要推送
 		// 异步推送消息
 		go apiExecuteTimeAlarmNotify(ctx, t1, t2)

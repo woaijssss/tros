@@ -12,6 +12,7 @@ const (
 
 	TrSuccess             = 200
 	TrBadRequest          = 400
+	TrNotFound            = 404
 	TrError               = 500
 	TrInvalidError        = 4000
 	TrInvalidToken        = 4001
@@ -46,6 +47,7 @@ const (
 var appCodeToHttpStatus = map[int32]int32{
 	TrSuccess:             http.StatusOK,
 	TrBadRequest:          http.StatusBadRequest,
+	TrNotFound:            http.StatusNotFound,
 	TrError:               http.StatusInternalServerError,
 	TrInvalidError:        http.StatusInternalServerError,
 	TrInvalidToken:        http.StatusForbidden,
