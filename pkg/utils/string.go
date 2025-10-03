@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 	"unicode"
+	"unicode/utf8"
 )
 
 func In(s string, lst []string) bool {
@@ -72,4 +73,9 @@ func IsAllWhiteSpace(s string) bool {
 // JoinStringArray 将字符串数组，用指定分隔符连接
 func JoinStringArray(arr []string, sep string) string {
 	return strings.Join(arr, sep)
+}
+
+// GetRealStringLength 获取字符真实的长度（人类看见的字符数，而非字节数）
+func GetRealStringLength(s string) int {
+	return utf8.RuneCountInString(s)
 }
