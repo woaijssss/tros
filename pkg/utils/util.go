@@ -144,8 +144,22 @@ func GenerateFullGlobalUuid(length int) string {
 	// Generate characters of a specified number of digits in a loop
 	for i := 0; i < length; i++ {
 		// Randomly select a character from the character set
-		randomIndex := rand.Intn(len(uuidFullChar))
-		uniqueID.WriteRune(rune(uuidFullChar[randomIndex]))
+		randomIndex := rand.Intn(len(uuidFullUpperChar))
+		uniqueID.WriteRune(rune(uuidFullUpperChar[randomIndex]))
+	}
+	return uniqueID.String()
+}
+
+// GenerateFullGlobalLowerUuid A universal method for generating unique IDs (combinations of numbers and lowercase letters) based on length.
+func GenerateFullGlobalLowerUuid(length int) string {
+	rand.Seed(time.Now().UnixNano())
+	// Used to store generated user IDs
+	var uniqueID strings.Builder
+	// Generate characters of a specified number of digits in a loop
+	for i := 0; i < length; i++ {
+		// Randomly select a character from the character set
+		randomIndex := rand.Intn(len(uuidFullLowerChar))
+		uniqueID.WriteRune(rune(uuidFullLowerChar[randomIndex]))
 	}
 	return uniqueID.String()
 }

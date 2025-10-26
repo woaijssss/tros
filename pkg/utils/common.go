@@ -23,6 +23,7 @@ package utils
 //}
 
 const (
-	uuidCommonChar = "0123456789"
-	uuidFullChar   = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	uuidCommonChar    = "0123456789"
+	uuidFullUpperChar = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	uuidFullLowerChar = "0123456789abcdefghijklmnopqrstuvwxyz"
 )
