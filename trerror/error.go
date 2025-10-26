@@ -3,7 +3,6 @@ package trerror
 import (
 	"errors"
 	"fmt"
-	"github.com/woaijssss/tros/trerror"
 	"github.com/woaijssss/tros/trerror/codes"
 	grpcCodes "google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -17,7 +16,7 @@ const (
 
 var (
 	TR_COMMON_OK = &TrError{Code: codes.OK, Message: ""}
-	
+
 	TR_SUCCESS               = &TrError{codes.TrSuccess, "成功"}
 	TR_BAD_REQUEST           = &TrError{codes.TrBadRequest, "无效的请求"}
 	TR_NOT_FOUND             = &TrError{codes.TrNotFound, "未找到数据"}
