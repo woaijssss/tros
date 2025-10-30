@@ -49,7 +49,21 @@ type GetWechatAccessTokenResponse struct {
 func (c *client) GetWechatAccessTokenWithCache(ctx context.Context) (string, error) {
 	accessTokenObj, err := c.getAccessToken(ctx)
 	if err != nil {
-		trlogger.Errorf(ctx, "wechatTextCheck GetWechatAccessToken err: [%+v]", err)
+		trlogger.Errorf(ctx, "GetWechatAccessTokenWithCache getAccessToken err: [%+v]", err)
+		return "", err
+	}
+	return accessTokenObj.AccessToken, nil
+}
+
+// GetWechatAccessTokenWithInput 带入参的调用
+func (c *client) GetWechatAccessTokenWithInput(ctx context.Context, appid, appSecret string) (string, error) {
+	if len(appid) <= 0 || len(appSecret) <= 0 {
+		return "", nil
+	}
+
+	accessTokenObj, err := c.getAccessTokenWithInput(ctx, appid, appSecret)
+	if err != nil {
+		trlogger.Errorf(ctx, "GetWechatAccessTokenWithInput getAccessTokenWithInput err: [%+v]", err)
 		return "", err
 	}
 	return accessTokenObj.AccessToken, nil

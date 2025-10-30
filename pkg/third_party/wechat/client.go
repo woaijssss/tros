@@ -59,6 +59,22 @@ func (c *client) getAccessToken(ctx context.Context) (*GetWechatAccessTokenRespo
 	}, nil
 }
 
+func (c *client) getAccessTokenWithInput(ctx context.Context, appid, appSecret string) (*GetWechatAccessTokenResponse, error) {
+	url := fmt.Sprintf(getAccessTokenUrl, appid, appSecret)
+	resp, _ := http.NewHttpClient().Get(ctx, url)
+	ret := new(getAccessTokenResponse)
+	err := http.ResToObj(resp, ret)
+	if err != nil {
+		trlogger.Errorf(ctx, "getAccessToken unmarshal err: %v", err)
+		return nil, err
+	}
+
+	return &GetWechatAccessTokenResponse{
+		AccessToken: ret.AccessToken,
+		ExpiresIn:   ret.ExpiresIn,
+	}, nil
+}
+
 type getGenerateUrlLinkResponse struct {
 	Errcode int32  `json:"errcode"`  // 错误码
 	Errmsg  string `json:"errmsg"`   // 错误信息
