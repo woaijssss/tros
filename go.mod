@@ -10,7 +10,6 @@ require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-playground/validator/v10 v10.14.0
 	github.com/go-sql-driver/mysql v1.7.0
-	github.com/gogo/protobuf v1.3.2
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
@@ -27,6 +26,7 @@ require (
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.7
 	github.com/unknwon/com v1.0.1
 	github.com/woaijssss/godbx v1.0.0
+	github.com/yuin/goldmark v1.2.1
 	go.mongodb.org/mongo-driver v1.3.5
 	golang.org/x/net v0.17.0
 	golang.org/x/sync v0.3.0
