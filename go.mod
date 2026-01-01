@@ -25,6 +25,7 @@ require (
 	github.com/stretchr/testify v1.8.4
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.7
 	github.com/unknwon/com v1.0.1
+	github.com/wechatpay-apiv3/wechatpay-go v0.2.21
 	github.com/woaijssss/godbx v1.0.0
 	github.com/yuin/goldmark v1.2.1
 	go.mongodb.org/mongo-driver v1.3.5

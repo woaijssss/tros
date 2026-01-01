@@ -26,11 +26,13 @@ const (
 	IFlyTekId        = "iflytek.app_id"     // 科大讯飞api的appid
 	IFlyTekSecretKey = "iflytek.secret_key" // 科大讯飞api的secret
 
-	WechatAppid     = "wechat.app_id"     // 微信小程序的appid
-	WechatAppSecret = "wechat.app_secret" // 微信小程序的app_secret
-	WechatMchId     = "wechat.mch_id"     // 微信商户id
-	WechatApiV2Key  = "wechat.apiv2_key"  // 微信支付的ApiV2密钥
-	WechatApiV3Key  = "wechat.apiv3_key"  // 微信支付的ApiV3密钥
+	WechatAppid                     = "wechat.app_id"                 // 微信小程序的appid
+	WechatAppSecret                 = "wechat.app_secret"             // 微信小程序的app_secret
+	WechatMchId                     = "wechat.mch_id"                 // 微信商户id
+	WechatApiV2Key                  = "wechat.apiv2_key"              // 微信支付的ApiV2密钥
+	WechatApiV3Key                  = "wechat.apiv3_key"              // 微信支付的ApiV3密钥
+	WechatApiMchCertificateSerialNo = "wechat.api_mch_cert_serial_no" // 微信支付的Api商户证书序列号
+	WechatApiV3PrivateKeyPath       = "wechat.apiv3_private_key_path" // 微信支付的ApiV3商户私钥文件路径
 
 	AliOssBucket          = "oss.bucket"          // 阿里oss存储桶名字
 	AliOssUrl             = "oss.url"             // 阿里oss存储桶访问主地址

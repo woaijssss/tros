@@ -3,12 +3,16 @@ package wechat
 import (
 	"context"
 	"fmt"
+	"github.com/wechatpay-apiv3/wechatpay-go/core"
+	"github.com/wechatpay-apiv3/wechatpay-go/core/option"
+	wechatpayUtils "github.com/wechatpay-apiv3/wechatpay-go/utils"
 	"github.com/woaijssss/tros"
 	"github.com/woaijssss/tros/conf"
 	"github.com/woaijssss/tros/constants"
 	trlogger "github.com/woaijssss/tros/logx"
 	"github.com/woaijssss/tros/pkg/utils"
 	"github.com/woaijssss/tros/pkg/utils/encrypt"
+	"github.com/woaijssss/tros/trerror"
 )
 
 var Client = new(client)
@@ -28,6 +32,31 @@ func (c *client) Init(atx tros.AppContext) error {
 	Client.wechatPayApiV3Key = conf.GetString(constants.WechatApiV3Key)
 	Client.redisWxAccessTokenKey = "wxAccessToken"
 	Client.redisWxAccessTokenTimeout = 6000
+	Client.MchCertificateSerialNo = conf.GetString(constants.WechatApiMchCertificateSerialNo)
+	Client.PrivateKeyPath = conf.GetString(constants.WechatApiV3PrivateKeyPath)
+
+	// 加载商户私钥
+	mchPrivateKey, err := wechatpayUtils.LoadPrivateKeyWithPath(c.PrivateKeyPath)
+	if err != nil {
+		return err
+	}
+
+	ctx := context.Background()
+	opts := []core.ClientOption{
+		option.WithWechatPayAutoAuthCipher(
+			c.mchId,
+			c.MchCertificateSerialNo,
+			mchPrivateKey,
+			c.wechatPayApiV3Key,
+		),
+	}
+
+	cli, err := core.NewClient(ctx, opts...)
+	if err != nil {
+		return err
+	}
+
+	Client.nativeClient = cli
 
 	return nil
 }
@@ -227,5 +256,40 @@ func (c *client) MiniPayOrder(ctx context.Context, opt *MiniPayOrderOption) (*Mi
 		CodeUrl:  response.CodeUrl,
 		WxObject: wxObject,
 		PaySign:  wxObjectSign,
+	}, nil
+}
+
+type NativePayOrder2QrCodeOption struct {
+	/* 以下为必填字段 */
+	//Sign     string `xml:"sign"`      // 签名
+	Body string `xml:"body"` // 商品描述，商品简单描述
+	/* OutTradeNo
+	商户订单号
+	商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|*且在同一个商户号下唯一
+	*/
+	OutTradeNo string `xml:"out_trade_no"`
+	TotalFee   int64  `xml:"total_fee"`  // 标价金额，订单总金额，单位为分
+	NotifyUrl  string `xml:"notify_url"` // 通知地址 异步接收微信支付结果通知的回调地址，通知url必须为外网可访问的url，不能携带参数。公网域名必须为https
+}
+
+type NativePayOrder2QrCodeResponse struct {
+	CodeUrl string // 微信支付二维码图片链接
+}
+
+// NativePayOrder2QrCode Native网页支付，返回微信支付二维码链接
+func (c *client) NativePayOrder2QrCode(ctx context.Context, opt *NativePayOrder2QrCodeOption) (*NativePayOrder2QrCodeResponse, error) {
+	if c.nativeClient == nil {
+		trlogger.Errorf(ctx, "NativePayOrder2QrCode native client is nil")
+		return nil, trerror.TR_ERROR
+	}
+
+	codeUrl, err := c.nativePayOrder2QrCodeRequest(ctx, opt)
+	if err != nil {
+		trlogger.Errorf(ctx, "NativePayOrder2QrCode c.nativePayOrder2QrCodeRequest err: [%+v][%+v]", err, *opt)
+		return nil, err
+	}
+
+	return &NativePayOrder2QrCodeResponse{
+		CodeUrl: codeUrl,
 	}, nil
 }

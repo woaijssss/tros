@@ -5,6 +5,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/wechatpay-apiv3/wechatpay-go/core"
+	"github.com/wechatpay-apiv3/wechatpay-go/services/payments/native"
 	"github.com/woaijssss/tros/client/http"
 	trlogger "github.com/woaijssss/tros/logx"
 	"github.com/woaijssss/tros/pkg/utils"
@@ -13,16 +15,21 @@ import (
 
 // WeChat public client
 type client struct {
-	appId     string
+	appId     string // 小程序/公众号AppID
 	appSecret string
 
 	// WeChat's payment field
-	mchId             string
-	wechatPayApiV2Key string
-	wechatPayApiV3Key string
+	mchId             string // 商户号
+	wechatPayApiV2Key string // APIv2密钥
+	wechatPayApiV3Key string // APIv3密钥
 
 	redisWxAccessTokenKey     string
 	redisWxAccessTokenTimeout int64 // expire time
+
+	// Native支付需要
+	nativeClient           *core.Client
+	MchCertificateSerialNo string // 商户证书序列号
+	PrivateKeyPath         string // 商户私钥文件路径
 }
 
 // WeChat pay client
@@ -306,4 +313,30 @@ func (c *client) miniPayOrderRequest(ctx context.Context, opt *miniPayOrderOptio
 
 	// True request successful, return result parameters
 	return &result, nil
+}
+
+// Native网页支付，返回微信支付二维码链接
+func (c *client) nativePayOrder2QrCodeRequest(ctx context.Context, opt *NativePayOrder2QrCodeOption) (string, error) {
+	svc := native.NativeApiService{Client: c.nativeClient}
+
+	resp, result, err := svc.Prepay(context.Background(), native.PrepayRequest{
+		Appid:       core.String(c.appId),
+		Mchid:       core.String(c.mchId),
+		Description: core.String(opt.Body),
+		OutTradeNo:  core.String(opt.OutTradeNo),
+		NotifyUrl:   core.String(opt.NotifyUrl),
+		Amount:      &native.Amount{Total: core.Int64(opt.TotalFee)},
+		//SpbillCreateIp: core.String("127.0.0.1"), // 用户终端IP
+	})
+
+	if err != nil {
+		return "", err
+	}
+
+	if result.Response.StatusCode != 200 {
+		return "", err
+	}
+
+	// 返回支付二维码URL
+	return *resp.CodeUrl, nil
 }
