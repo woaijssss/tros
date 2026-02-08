@@ -97,8 +97,11 @@ func EncryptAES256(plaintext string, key []byte) (string, error) {
 		return "", err
 	}
 
-	ciphertext := gcm.Seal(nonce, nonce, []byte(plaintext), nil)
-	return base64.StdEncoding.EncodeToString(ciphertext), nil
+	// 正确：先生成纯密文（不含 nonce）
+	ciphertextWithTag := gcm.Seal(nil, nonce, []byte(plaintext), nil)
+	// 再手动拼接 nonce + ciphertextWithTag
+	out := append(nonce, ciphertextWithTag...)
+	return base64.StdEncoding.EncodeToString(out), nil
 }
 
 func DecryptAES256(b64cipher string, key []byte) (string, error) {
