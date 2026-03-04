@@ -200,3 +200,45 @@ func CheckURLIsAccessible(ctx context.Context, url string) bool {
 
 	return true
 }
+
+// 生成6位数验证码 start
+// Generate6DigitCode 生成6位数字验证码，避免连续或重复数字
+func Generate6DigitCode() string {
+	rand.Seed(time.Now().UnixNano())
+
+	// 初始化验证码数组
+	code := make([]int, 6)
+
+	// 生成第一位数字（1-9）
+	code[0] = rand.Intn(9) + 1
+
+	// 生成后续5位数字
+	for i := 1; i < 6; i++ {
+		for {
+			// 生成0-9的随机数字
+			num := rand.Intn(10)
+
+			// 检查是否与前一位数字相同或连续
+			if num != code[i-1] && abs(num-code[i-1]) != 1 {
+				code[i] = num
+				break
+			}
+		}
+	}
+
+	// 将数字转换为字符串
+	result := fmt.Sprintf("%d%d%d%d%d%d",
+		code[0], code[1], code[2], code[3], code[4], code[5])
+
+	return result
+}
+
+// abs 计算绝对值
+func abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
+}
+
+// 生成6位数验证码 end
