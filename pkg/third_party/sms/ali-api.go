@@ -22,11 +22,11 @@ type AliSendSmsOption struct {
 	TemplateParam string
 }
 
-func (ass *aliSmsService) Send(ctx context.Context, opt *AliSendSmsOption) error {
+func (ass *aliSmsService) Send(ctx context.Context, opt *AliSendSmsOption) (*dysmsapi.SendSmsResponse, error) {
 	client, err := dysmsapi.NewClientWithAccessKey(opt.RegionId, opt.AccessKeyId, opt.AccessKeySecret)
 	if err != nil {
 		trlogger.Errorf(ctx, "aliSmsService send sms dysmsapi.NewClientWithAccessKey err: [%+v]", err)
-		return err
+		return nil, err
 	}
 
 	request := dysmsapi.CreateSendSmsRequest()
@@ -38,18 +38,18 @@ func (ass *aliSmsService) Send(ctx context.Context, opt *AliSendSmsOption) error
 	response, err := client.SendSms(request)
 	if err != nil {
 		trlogger.Errorf(ctx, "aliSmsService send sms client.SendSms err: [%+v]", err)
-		return err
+		return nil, err
 	}
 
 	if response == nil {
 		trlogger.Errorf(ctx, "aliSmsService send sms response == nil")
-		return trerror.TR_ERROR
+		return nil, trerror.TR_ERROR
 	}
 
 	if response.Code != "OK" {
 		trlogger.Errorf(ctx, "aliSmsService send sms response err: [%+v]", *response)
-		return trerror.TR_ERROR
+		return response, trerror.TR_ERROR
 	}
 
-	return nil
+	return response, nil
 }
