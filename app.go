@@ -30,6 +30,10 @@ type App struct {
 	servers      []Server
 }
 
+func (app *App) GetContext() context.Context {
+	return app.ctx
+}
+
 // SettingFunc of app
 type SettingFunc func(*App)
 

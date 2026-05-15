@@ -1,6 +1,8 @@
 module github.com/woaijssss/tros
 
-go 1.19
+go 1.21
+
+toolchain go1.24.7
 
 require (
 	github.com/360EntSecGroup-Skylar/excelize v1.4.1
@@ -18,23 +20,24 @@ require (
 	github.com/json-iterator/go v1.1.12
 	github.com/lestrrat-go/file-rotatelogs v2.3.0+incompatible
 	github.com/lionsoul2014/ip2region/binding/golang v0.0.0-20240510055607-89e20ab7b6c6
+	github.com/projectdiscovery/asnmap v1.1.1
 	github.com/prometheus/client_golang v1.7.1
 	github.com/satori/go.uuid v1.2.0
 	github.com/siddontang/go v0.0.0-20170517070808-cb568a3e5cc0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/viper v1.17.0
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.7
 	github.com/unknwon/com v1.0.1
 	github.com/wechatpay-apiv3/wechatpay-go v0.2.21
 	github.com/woaijssss/godbx v1.0.0
-	github.com/yuin/goldmark v1.2.1
+	github.com/yuin/goldmark v1.5.4
 	go.mongodb.org/mongo-driver v1.3.5
-	golang.org/x/net v0.17.0
+	golang.org/x/net v0.23.0
 	golang.org/x/sync v0.3.0
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20231030173426-d783a09b4405
 	google.golang.org/grpc v1.59.0
-	google.golang.org/protobuf v1.31.0
+	google.golang.org/protobuf v1.33.0
 )
 
 require (
@@ -53,7 +56,7 @@ require (
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
-	github.com/google/go-querystring v1.0.0 // indirect
+	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jehiah/go-strftime v0.0.0-20171201141054-1d33003b3869 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
@@ -91,11 +94,11 @@ require (
 	github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c // indirect
 	github.com/xdg/stringprep v0.0.0-20180714160509-73f8eece6fdc // indirect
 	go.uber.org/atomic v1.9.0 // indirect
-	go.uber.org/multierr v1.9.0 // indirect
+	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/arch v0.3.0 // indirect
-	golang.org/x/crypto v0.14.0 // indirect
+	golang.org/x/crypto v0.21.0 // indirect
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect
-	golang.org/x/sys v0.13.0 // indirect
+	golang.org/x/sys v0.18.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20231106174013-bbf56f31fb17 // indirect
