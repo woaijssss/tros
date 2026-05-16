@@ -3,9 +3,11 @@ package ip
 import (
 	"context"
 	"fmt"
+	"github.com/oschwald/geoip2-golang"
 	asnmap "github.com/projectdiscovery/asnmap/libs"
 	trlogger "github.com/woaijssss/tros/logx"
 	"net"
+	"strconv"
 	"strings"
 )
 
@@ -19,6 +21,10 @@ type IPInfo struct {
 	SubnetMask string `json:"subnet_mask"` // 子网掩码 (Windows/Linux通用)
 	IPStart    string `json:"ip_start"`    // IP段起始
 	IPEnd      string `json:"ip_end"`      // IP段结束
+
+	// 位置信息
+	Lon string `json:"lon"` // 经度
+	Lat string `json:"lat"` // 纬度
 
 	AsNumberInfo // AS号信息
 }
@@ -51,7 +57,24 @@ func (c *client) GetIpRegion(ctx context.Context, ip string) (*IPInfo, error) {
 	info.ASCountry = respAsNumberInfo.ASCountry
 	info.ASRange = respAsNumberInfo.ASRange
 
+	if c.geoIpDb != nil {
+		cityGeoInfo, err := c.getIpLocation(ctx, ip)
+		if err != nil {
+			// pass
+		} else {
+			info.Lon = strconv.FormatFloat(cityGeoInfo.Location.Longitude, 'f', -1, 64)
+			info.Lat = strconv.FormatFloat(cityGeoInfo.Location.Latitude, 'f', -1, 64)
+		}
+	}
+
 	return info, nil
+}
+
+type getIpLocationResult struct {
+}
+
+func (c *client) getIpLocation(ctx context.Context, ipStr string) (*geoip2.City, error) {
+	return c.geoIpDb.City(net.ParseIP(ipStr))
 }
 
 func (c *client) getAsNumber(ctx context.Context, ip string) (*AsNumberInfo, error) {
