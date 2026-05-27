@@ -11,8 +11,9 @@ const (
 )
 
 const (
-	RedisPoolMaxIdle     = 100
-	RedisPoolMaxActive   = 10000
+	RedisPoolMaxIdle = 500
+	//RedisPoolMaxActive   = 10000
+	RedisPoolMaxActive   = 0
 	RedisPoolIdleTimeout = 1
 )
 
