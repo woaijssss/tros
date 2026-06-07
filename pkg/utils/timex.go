@@ -209,6 +209,13 @@ func CalcDaysBetweenDate(s, e string) (int, error) {
 	return int(duration.Hours() / 24), nil
 }
 
+func CalcDaysBetweenTime(s, e time.Time) (int, error) {
+	// Calculate the difference in days between two dates
+	duration := e.Sub(s)
+
+	return int(duration.Hours() / 24), nil
+}
+
 func CalcMillisecondsBetween(t1, t2 time.Time) int64 {
 	return t2.Sub(t1).Milliseconds()
 }
