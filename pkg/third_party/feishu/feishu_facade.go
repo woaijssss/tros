@@ -13,6 +13,8 @@ func (c *client) Init(atx tros.AppContext) error {
 	// 默认使用测试环境的通知地址
 	c.WebHookUrl = conf.GetString(constants.FeiShuWebHookUrlKeyForTest)
 	c.SignKey = conf.GetString(constants.FeiShuSignKeyForTest)
+	c.AppId = conf.GetString(constants.FeiShuAppIdForProd)
+	c.AppSecret = conf.GetString(constants.FeiShuAppSecretForProd)
 
 	return nil
 }
@@ -37,4 +39,8 @@ func (c *client) BusinessFeiShuRobotTextMessage(ctx context.Context, content str
 	}
 
 	return c.businessFeiShuRobotTextMessage(ctx, content)
+}
+
+func (c *client) GetTenantToken(ctx context.Context) (string, error) {
+	return c.getTenantToken(ctx)
 }
