@@ -262,6 +262,40 @@ func SetV2(context context.Context, key, val string) error {
 	return err
 }
 
+func SetNx(ctx context.Context, key string, value string, expire int64) (bool, error) {
+	client := getRedisConn(ctx)
+	defer client.Close()
+
+	if client.Err() != nil {
+		trlogger.Fatalf(ctx, "Get redis connection err: %+v", client.Err())
+		return false, client.Err()
+	}
+
+	// 执行 SET key value NX EX expire
+	// reply 的类型会是 []byte (成功) 或 nil (失败)
+	reply, err := client.Do("SET", key, value, "NX", "EX", expire)
+
+	// 1. 如果是 Redis 底层报错，直接返回错误
+	if err != nil {
+		trlogger.Fatalf(ctx, "Redis SETNX command err: %+v", err)
+		return false, err
+	}
+
+	// 2. 如果 key 已存在，Redis 会返回 nil，此时 reply == nil
+	if reply == nil {
+		return false, nil
+	}
+
+	// 3. 如果设置成功，Redis 会返回 "OK"
+	// 这里直接进行字节切片断言，判断是否等于 "OK"
+	if okBytes, ok := reply.(string); ok && okBytes == "OK" {
+		return true, nil
+	}
+
+	// 4. 兜底：如果返回了其他未知类型，视为失败
+	return false, nil
+}
+
 func Expire(context context.Context, key string, expire int64) error {
 	client := getRedisConn(context)
 	defer client.Close()
