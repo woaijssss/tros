@@ -7,6 +7,7 @@ import (
 	trlogger "github.com/woaijssss/tros/logx"
 	"io"
 	"net/http"
+	"time"
 )
 
 func NewHttpClient() *Client {
@@ -19,6 +20,10 @@ func (c *Client) SetHeader(k, v string) {
 
 func (c *Client) Post(ctx context.Context, url string, body io.Reader) (*Response, error) {
 	return c.send(ctx, http.MethodPost, url, body)
+}
+
+func (c *Client) PostWithTimeout(ctx context.Context, url string, body io.Reader, timeout time.Duration) (*Response, error) {
+	return c.sendWithTimeout(ctx, http.MethodPost, url, body, timeout)
 }
 
 func (c *Client) PostXml(ctx context.Context, url string, data any) (*Response, error) {
@@ -58,7 +63,7 @@ func (c *Client) GetHeader(k string) string {
 func (c *Client) send(ctx context.Context, method, url string, body io.Reader) (*Response, error) {
 	req, err := http.NewRequest(method, url, body)
 	if err != nil {
-		trlogger.Errorf(ctx, "new http json request with %s err: [%+v]", method, err)
+		trlogger.Errorf(ctx, "send new http json request with %s err: [%+v]", method, err)
 		return nil, err
 	}
 
@@ -68,7 +73,28 @@ func (c *Client) send(ctx context.Context, method, url string, body io.Reader) (
 
 	resp, err := c.hc.Do(req)
 	if err != nil {
-		trlogger.Errorf(ctx, "do http json with %s err: [%+v]", method, err)
+		trlogger.Errorf(ctx, "send do http json with %s err: [%+v]", method, err)
+		return nil, err
+	}
+
+	return &Response{resp}, nil
+}
+
+// json请求
+func (c *Client) sendWithTimeout(ctx context.Context, method, url string, body io.Reader, timeout time.Duration) (*Response, error) {
+	req, err := http.NewRequestWithContext(ctx, method, url, body)
+	if err != nil {
+		trlogger.Errorf(ctx, "sendWithTimeout new http json request with %s err: [%+v]", method, err)
+		return nil, err
+	}
+
+	for k, v := range c.header {
+		req.Header.Set(k, v)
+	}
+
+	resp, err := c.hc.Do(req)
+	if err != nil {
+		trlogger.Errorf(ctx, "sendWithTimeout do http json with %s err: [%+v]", method, err)
 		return nil, err
 	}
 
