@@ -35,13 +35,16 @@ func (c *client) Init(atx tros.AppContext) error {
 	Client.MchCertificateSerialNo = conf.GetString(constants.WechatApiMchCertificateSerialNo)
 	Client.PrivateKeyPath = conf.GetString(constants.WechatApiV3PrivateKeyPath)
 
+	ctx := context.Background()
+	if !utils.CheckFileExist(c.PrivateKeyPath) { // 支持非支付需要的初始化
+		return nil
+	}
 	// 加载商户私钥
 	mchPrivateKey, err := wechatpayUtils.LoadPrivateKeyWithPath(c.PrivateKeyPath)
 	if err != nil {
 		return err
 	}
 
-	ctx := context.Background()
 	opts := []core.ClientOption{
 		option.WithWechatPayAutoAuthCipher(
 			c.mchId,
