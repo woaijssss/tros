@@ -113,4 +113,4 @@ mysql:
   maxIdleTime: 1200
 ```
 
-- Step 5: At this point, you can efficiently start the web server service and read/write databases
+- Step 5 : At this point, you can efficiently start the web server service and read/write databases
